@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import Home from "./components/home/Home";
+import Login from "./components/login/Login";
+import Play from "./components/play/Play";
+
+import {BrowserRouter as Router, Link, Route} from "react-router-dom";
+
 
 class App extends Component {
   constructor(props) {
@@ -17,20 +22,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Router>
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo"/>
+            <Link to="/">Home</Link>
+            <Link to="/play">Play</Link>
+            <Link to="/login">Login</Link>
+          </header>
+          <Route path="/" exact component={Home}/>
+          <Route path="/play" exact component={Play}/>
+          <Route path="/login" exact component={Login}/>
+        </Router>
       </div>
     );
   }
