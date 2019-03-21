@@ -50,17 +50,20 @@ class Login extends Component {
     } else {
       return (
         <div className="Login">
+          <div className="auth">
+            <h3>Login with one of the options below</h3>
           <StyledFirebaseAuth className="auth" uiConfig={{
             signInFlow: 'redirect',
             signInOptions: [
-              firebase.auth.GoogleAuthProvider.PROVIDER_ID,
               firebase.auth.EmailAuthProvider.PROVIDER_ID,
+              firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             ],
             credentialHelper: 'none'
             // callbacks: {signInSuccessWithAuthResult: () => false,}
           }}
                               firebaseAuth={firebase.auth()}
           />
+          </div>
         </div>
       );
     }
