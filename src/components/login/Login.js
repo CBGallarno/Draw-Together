@@ -5,6 +5,7 @@ import 'firebase/firestore'
 import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/FirebaseAuth';
 import {connect} from "react-redux";
+import {Redirect} from 'react-router';
 
 const mapStateToProps = state => {
   return {
@@ -12,28 +13,19 @@ const mapStateToProps = state => {
   }
 }
 
-const signout = () => {
-  firebase.auth().signOut()
-}
-
-
 let loginComponenet = ({dispatch, auth}) => {
-  if (auth.signedIn) {
-    return (
-      <div>
-        <p>{auth.userName}</p>
-        <button onClick={() => signout()}>Signout</button>
-      </div>
-    )
-  } else {
+  if (!auth.signedIn) {
     return (
       <div className="Login">
         <div className="auth">
           <h3>Login with one of the options below</h3>
-          <StyledFirebaseAuth className="auth" uiConfig={{
+          <StyledFirebaseAuth uiConfig={{
             signInFlow: 'redirect',
             signInOptions: [
-              firebase.auth.EmailAuthProvider.PROVIDER_ID,
+              {
+                provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                requireDisplayName: false
+              },
               firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             ],
             credentialHelper: 'none',
@@ -47,6 +39,10 @@ let loginComponenet = ({dispatch, auth}) => {
         </div>
       </div>
     );
+  } else {
+    return (
+      <Redirect to="/profile"/>
+    )
   }
 }
 

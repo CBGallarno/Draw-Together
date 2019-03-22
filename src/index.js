@@ -19,7 +19,6 @@ firebase.initializeApp({
 
 firebase.auth().onAuthStateChanged((user) => {
   if (!!user) {
-    store.dispatch(login(user.uid))
     firebase.firestore().collection('users').doc(user.uid).get().then((response) => {
       const {username, email} = response.data()
       store.dispatch(login(user.uid, username, email))

@@ -3,36 +3,28 @@ import logo from '../logo.svg';
 import './App.scss';
 import Home from "./home/Home";
 import Login from "./login/Login";
-import firebase from 'firebase';
+import Profile from "./profile/Profile";
 import 'firebase/firestore'
 import 'firebase/auth';
 import Play from "./play/Play";
 
 import {BrowserRouter as Router, Link, Route} from "react-router-dom";
+import {connect} from "react-redux";
 
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      signedIn: false,
-      navPages: {
-        'Home': Home,
-      }
-    }
-  }
-
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      this.setState({signedIn: !!user})
-    });
-  }
 
   render() {
     let loginEl = (<Link to="/login">Login</Link>)
-    if (this.state.signedIn) {
+    if (this.props.auth.signedIn) {
       loginEl = (<Link to="/profile">Profile</Link>)
     }
+
     return (
       <div className="App">
         <Router>
@@ -45,11 +37,11 @@ class App extends Component {
           <Route path="/" exact component={Home}/>
           <Route path="/play" component={Play}/>
           <Route path="/login" component={Login}/>
-          <Route path="/profile" component={Login}/>
+          <Route path="/profile" component={Profile}/>
         </Router>
       </div>
     );
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

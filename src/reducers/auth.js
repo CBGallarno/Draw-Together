@@ -1,4 +1,4 @@
-import {LOGIN, LOGOUT} from "actions";
+import {LOGIN, LOGOUT, UPDATE_USERNAME} from "actions";
 
 const initialSate = {
   signedIn: false,
@@ -9,6 +9,8 @@ const initialSate = {
 
 const auth = (state = initialSate, action) => {
   switch (action.type) {
+    case UPDATE_USERNAME:
+      return Object.assign({}, state, {userName: action.userName})
     case LOGIN:
       return {
         signedIn: true,
