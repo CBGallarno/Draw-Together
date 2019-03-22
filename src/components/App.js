@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import logo from '../logo.svg';
 import './App.scss';
-import Home from "./components/home/Home";
-import Login from "./components/login/Login";
+import Home from "./home/Home";
+import Login from "./login/Login";
 import firebase from 'firebase';
 import 'firebase/firestore'
 import 'firebase/auth';
-import Play from "./components/play/Play";
+import Play from "./play/Play";
 
 import {BrowserRouter as Router, Link, Route} from "react-router-dom";
 
