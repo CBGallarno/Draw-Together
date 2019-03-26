@@ -5,9 +5,9 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
-import rootReducer from './reducers'
+import {rootReducer} from './reducers'
 import firebase from "firebase";
-import {login, logout} from "actions";
+import {login, logout} from "@/actions";
 
 const store = createStore(rootReducer)
 
@@ -20,7 +20,7 @@ firebase.initializeApp({
 firebase.auth().onAuthStateChanged((user) => {
   if (!!user) {
     firebase.firestore().collection('users').doc(user.uid).get().then((response) => {
-      const {username, email} = response.data()
+      const {username, email}: any = response.data()
       store.dispatch(login(user.uid, username, email))
     })
   } else {

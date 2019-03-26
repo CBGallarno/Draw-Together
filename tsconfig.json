@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "preserve",
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "functions",
+    "src/setupTests.ts"
+  ],
+  "types": [
+    "typePatches"
+  ],
+  "include": [
+    "src"
+  ]
+}

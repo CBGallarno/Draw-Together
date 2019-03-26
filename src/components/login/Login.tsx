@@ -1,19 +1,26 @@
-import React from 'react';
+import * as React from 'react';
 import './Login.scss'
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 import 'firebase/firestore'
 import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/FirebaseAuth';
 import {connect} from "react-redux";
+import * as Redux from "@/types/Redux"
 import {Redirect} from 'react-router';
+import {AppState} from "@/reducers";
+import {AuthState} from "@/types/Redux";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
   return {
     auth: state.auth
   }
 }
 
-let loginComponenet = ({dispatch, auth}) => {
+interface LoginProps extends Redux.Props {
+  auth: AuthState
+}
+
+let loginComponenet: React.FunctionComponent<LoginProps> = ({dispatch, auth}: LoginProps) => {
   if (!auth.signedIn) {
     return (
       <div className="Login">

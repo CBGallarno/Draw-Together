@@ -1,13 +1,14 @@
-import {LOGIN, LOGOUT, UPDATE_USERNAME} from "actions";
+import {LOGIN, LOGOUT, UPDATE_USERNAME, AuthActions} from "@/actions";
+import {AuthState} from "@/types/Redux";
 
 const initialSate = {
   signedIn: false,
-  userId: undefined,
-  userName: undefined,
-  userEmail: undefined
+  userId: '',
+  userName: '',
+  userEmail: ''
 };
 
-const auth = (state = initialSate, action) => {
+export function AuthReducer(state : AuthState = initialSate, action: AuthActions): AuthState {
   switch (action.type) {
     case UPDATE_USERNAME:
       return Object.assign({}, state, {userName: action.userName})
@@ -23,6 +24,6 @@ const auth = (state = initialSate, action) => {
     default:
       return state
   }
-};
+}
 
-export default auth
+export default AuthReducer

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as firebase from "firebase";
-import {updateGame, updateUsers} from "../../actions/game";
+import {updateGame, setUsers} from "../../actions/game";
 
 const mapStateToProps = (state) => {
   return {
@@ -10,7 +10,6 @@ const mapStateToProps = (state) => {
   }
 };
 
-// TODO: embed game id in URL
 class GameLobby extends Component {
 
 
@@ -34,7 +33,7 @@ class GameLobby extends Component {
       this.props.dispatch(updateGame({gameId: response.id, ...response.data()}));
     })
     this.unsubscribeCurrentGameUsersListener = this.gameRef.collection('users').doc('users').onSnapshot((response) => {
-      this.props.dispatch(updateUsers(response.data()));
+      this.props.dispatch(setUsers(response.data()));
     })
   }
 
