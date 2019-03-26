@@ -34,11 +34,9 @@ export const initializeGameOnCreate = functions.firestore.document('games/{gameI
 
     return db.collection('games').where('joinCode', '==', joinCode).get().then((response) => {
         if (response.empty) {
-            return
+            return snap.ref.update({joinCode: joinCode, lobby: true})
         }
         console.error("Join code not available: " + joinCode)
         return snap.ref.update({error: true})
-    }).then(() => {
-        return snap.ref.update({joinCode: joinCode, lobby: true})
     })
 });

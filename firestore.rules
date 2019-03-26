@@ -5,10 +5,15 @@ service cloud.firestore {
     }
     match /games/{game} {
     	allow read: if true;
-      allow create: if request.auth.uid != null && request.resource.data.host == request.auth.uid
+      allow create: if request.auth.uid != null && request.resource.data.host == request.auth.uid;
+      match /users/users {
+      	allow read: if true;
+        allow write: if get(/databases/$(database)/documents/games/$(game)).data.lobby == true;
+      }
     }
     match /users/{user} {
-    	allow read, write: if true;
+    	allow read;
+      allow write: if user == request.auth.uid;
     }
   }
 }

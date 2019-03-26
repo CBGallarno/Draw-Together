@@ -1,53 +1,53 @@
 import React, {Component} from 'react';
 import * as firebase from "firebase";
 import {connect} from "react-redux";
-import {updateGame} from 'actions/game'
+import {Route} from "react-router-dom";
+import GameLobby from "../gameLobby/GameLobby";
+import PlayHome from "../playHome/PlayHome";
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     game: state.game
   }
-}
+};
 
 class PlayComponent extends Component {
 
   createGame() {
-    firebase.firestore().collection('games').add({host: this.props.auth.userId}).then((response) => {
-        if (this.unsubscribeCurrentGameListener !== undefined) {
-          this.unsubscribeCurrentGameListener()
+    firebase.firestore().collection('games').add({host: this.props.auth.userId})
+      .then((response) => {
+        this.props.history.push(`${this.props.match.url}/lobby/${response.id}`)
+      })
+  }
+
+  joinGame(code) {
+    firebase.firestore().collection('games').where('joinCode', '==', code).where('lobby', '==', true).get().then((response) => {
+      if (response.size === 1) {
+        const doc = response.docs[0]
+        let obj = {}
+        obj[this.props.auth.userId] = {
+          team: null,
+          displayName: this.props.auth.userName
         }
-      const dispatch = this.props.dispatch
-      this.unsubscribeCurrentGameListener = firebase.firestore().collection('games').doc(response.id).onSnapshot((response) => {
-        dispatch(updateGame({gameId: response.id, ...response.data()}));
-      })
+        doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() =>
+          this.props.history.push(`${this.props.match.url}/lobby/${doc.id}`)
+        )
+      } else {
+        // game not found. Could be duplicates found??? (prevent this)
       }
-    ).catch((err) => {
-      console.error(err)
     })
-  }
-
-  componentDidUpdate() {
-    if (this.unsubscribeCurrentGameListener === undefined && this.props.game.gameId !== undefined) {
-      const dispatch = this.props.dispatch
-      this.unsubscribeCurrentGameListener = firebase.firestore().collection('games').doc(this.props.game.gameId).onSnapshot((response) => {
-        dispatch(updateGame(response.data()));
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribeCurrentGameListener !== undefined) {
-      this.unsubscribeCurrentGameListener()
-    }
   }
 
   render() {
     return (
       <div className="Play">
-        <h1>Play</h1>
-        <button>Join Game</button>
-        <button onClick={() => this.createGame()}>Create Game</button>
+        <Route path={`${this.props.match.path}/lobby/:gameId`} component={GameLobby}/>
+        <Route
+          path={`${this.props.match.path}`} exact
+          render={(props) => <PlayHome createGameClick={() => this.createGame()}
+                                       joinGameClick={(code) => this.joinGame(code)} {...props}/>}
+        />
       </div>
     );
   }
