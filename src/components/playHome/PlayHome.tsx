@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {RefObject} from 'react';
 import {connect} from "react-redux";
-import {GameState} from "../../types/Redux";
-import {AppState} from "../../reducers";
+import {GameState} from "@/types/DTRedux";
+import {AppState} from "@/reducers";
 
 interface PlayHomeProps {
     game: GameState

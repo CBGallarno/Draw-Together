@@ -11,43 +11,43 @@ import Play from "./play/Play";
 import {BrowserRouter as Router, Link, Route} from "react-router-dom";
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
-import {AuthState} from "@/types/Redux";
+import {AuthState} from "@/types/DTRedux";
 
 const mapStateToProps = (state: AppState) => {
-  return {
-    auth: state.auth
-  }
+    return {
+        auth: state.auth
+    }
 }
 
 interface Props {
-  auth: AuthState
+    auth: AuthState
 }
 
 class App extends React.Component<Props, any> {
 
-  render() {
-    let loginEl = (<Link to="/login">Login</Link>)
-    if (this.props.auth.signedIn) {
-      loginEl = (<Link to="/profile">Profile</Link>)
-    }
+    render() {
+        let loginEl = (<Link to="/login">Login</Link>)
+        if (this.props.auth.signedIn) {
+            loginEl = (<Link to="/profile">Profile</Link>)
+        }
 
-    return (
-        <div className="App">
-          <Router>
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo"/>
-              <Link to="/">Home</Link>
-              <Link to="/play">Play</Link>
-              {loginEl}
-            </header>
-            <Route path="/" exact component={Home}/>
-            <Route path="/play" component={Play}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/profile" component={Profile}/>
-          </Router>
-        </div>
-    );
-  }
+        return (
+            <div className="App">
+                <Router>
+                    <header className="App-header">
+                        <img src={logo} className="App-logo" alt="logo"/>
+                        <Link to="/">Home</Link>
+                        <Link to="/play">Play</Link>
+                        {loginEl}
+                    </header>
+                    <Route path="/" exact component={Home}/>
+                    <Route path="/play" component={Play}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/profile" component={Profile}/>
+                </Router>
+            </div>
+        );
+    }
 }
 
 export default connect(mapStateToProps)(App);

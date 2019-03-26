@@ -21,17 +21,17 @@ export interface LogoutAction {
 export type AuthActions = LoginAction | LogoutAction | UpdateUserNameAction
 
 export const login = (userId: string, userName: string, userEmail: string): LoginAction => ({
-  type: LOGIN,
-  userId,
-  userName,
-  userEmail
+    type: LOGIN,
+    userId,
+    userName,
+    userEmail
 });
 
 export const updateUserName = (userName: string): UpdateUserNameAction => ({
-  type: UPDATE_USERNAME,
-  userName
+    type: UPDATE_USERNAME,
+    userName
 })
 
 export const logout = (): LogoutAction => ({
-  type: LOGOUT
+    type: LOGOUT
 });
