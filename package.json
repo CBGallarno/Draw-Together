@@ -22,8 +22,6 @@
     "typescript": "^3.3.4000"
   },
   "scripts": {
-    "preinstall": "rm -f node_modules/@",
-    "postinstall": "ln -s `pwd`/src node_modules/@",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
