@@ -1,7 +1,7 @@
 import {
     CREATE_GAME,
     CreateGameAction,
-    GameActionTypes,
+    GameActionTypes, JOIN_GAME, JoinGameAction,
     SET_USERS,
     SetUsersAction,
     UPDATE_GAME,
@@ -25,6 +25,14 @@ export function GameReducer(state: GameState = initialSate, action: GameActionTy
                 host: action.host,
                 users: {},
                 lobby: false
+            }
+        case JOIN_GAME:
+            action = action as JoinGameAction
+            return {
+                gameId: action.gameId,
+                host: action.host,
+                users: {},
+                lobby: true
             }
         case UPDATE_GAME:
             action = action as UpdateGameAction

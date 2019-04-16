@@ -7,7 +7,7 @@ import {AuthState, GameState, Props} from "@/types/DTRedux";
 import {AppState} from "@/reducers";
 import {RouteChildrenProps} from "react-router";
 import RoundScreen from "@/components/roundScreen/RoundScreen";
-import {setUsers, updateGame} from "@/actions/game";
+import {setUsers, updateGame, createGame, joinGame} from "@/actions/game";
 
 interface PlayProps extends RouteChildrenProps<{ gameId: string }>, Props {
     game: GameState
@@ -30,8 +30,9 @@ class PlayComponent extends React.Component<PlayProps, any> {
     createGame() {
         firebase.firestore().collection('games').add({host: this.props.auth.userId})
             .then((response) => {
-                this.subscribeToGameDocs(response.id)
-                this.props.history.push(`${this.props.match!.url}/${response.id}`)
+                this.props.dispatch(createGame(response.id, this.props.auth.userId));
+                this.subscribeToGameDocs(response.id);
+                this.props.history.push(`${this.props.match!.url}/${response.id}`);
             })
     }
 
@@ -45,8 +46,9 @@ class PlayComponent extends React.Component<PlayProps, any> {
                     displayName: this.props.auth.userName
                 };
                 doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() => {
-                    this.subscribeToGameDocs(doc.id)
-                    this.props.history.push(`${this.props.match!.url}/${doc.id}`)
+                    this.props.dispatch(joinGame(doc.id, doc.get("host")));
+                    this.subscribeToGameDocs(doc.id);
+                    this.props.history.push(`${this.props.match!.url}/${doc.id}`);
                 })
             } else {
                 // TODO: game not found. Could be duplicates found??? (prevent this)

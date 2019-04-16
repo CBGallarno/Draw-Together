@@ -5,7 +5,7 @@ service cloud.firestore {
     }
     match /games/{game} {
     	function getGamePrefix() {
-      	return "/databases/$(database)/documents/games/$(game)"
+      	return "databases/" + database + "/documents/games/" + game
     	}
     	allow read: if true;
       allow create: if request.auth.uid != null && request.resource.data.host == request.auth.uid;
