@@ -12,12 +12,13 @@ import {BrowserRouter as Router, Link, Route} from "react-router-dom";
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
 import {AuthState} from "@/types/DTRedux";
+import CanvasTest from "@/components/canvasTest/CanvasTest"
 
 const mapStateToProps = (state: AppState) => {
     return {
         auth: state.auth
     }
-}
+};
 
 interface Props {
     auth: AuthState
@@ -26,7 +27,7 @@ interface Props {
 class App extends React.Component<Props, any> {
 
     render() {
-        let loginEl = (<Link to="/login">Login</Link>)
+        let loginEl = (<Link to="/login">Login</Link>);
         if (this.props.auth.signedIn) {
             loginEl = (<Link to="/profile">Profile</Link>)
         }
@@ -41,9 +42,10 @@ class App extends React.Component<Props, any> {
                         {loginEl}
                     </header>
                     <Route path="/" exact component={Home}/>
-                    <Route path="/play" component={Play}/>
+                    <Route path="/play/:gameId?" component={Play}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/profile" component={Profile}/>
+                    <Route path="/canvas" component={CanvasTest}/>
                 </Router>
             </div>
         );

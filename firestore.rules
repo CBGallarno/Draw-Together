@@ -4,11 +4,23 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /games/{game} {
+    	function getGamePrefix() {
+      	return "/databases/$(database)/documents/games/$(game)"
+    	}
     	allow read: if true;
       allow create: if request.auth.uid != null && request.resource.data.host == request.auth.uid;
+      allow update: if resource.data.host == request.auth.uid
       match /users/users {
       	allow read: if true;
-        allow write: if get(/databases/$(database)/documents/games/$(game)).data.lobby == true;
+        allow write: if get(path(getGamePrefix())).data.lobby == true;
+      }
+      match /roundInfo/roundWords {
+      	allow read: if get(path(getGamePrefix()) + "/roundInfo/" + get(path(getGamePrefix())).data.currentRound).drawer == request.auth.uid
+        allow write: if false;
+      }
+      match /roundInfo/{round} {
+      	allow read: if true;
+        allow write: if false;
       }
     }
     match /users/{user} {

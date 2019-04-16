@@ -12,7 +12,8 @@ import {GameState, UsersState} from "@/types/DTRedux";
 const initialSate = {
     gameId: '',
     host: '',
-    users: {}
+    users: {},
+    lobby: false
 };
 
 export function GameReducer(state: GameState = initialSate, action: GameActionTypes): GameState {
@@ -22,7 +23,8 @@ export function GameReducer(state: GameState = initialSate, action: GameActionTy
             return {
                 gameId: action.gameId,
                 host: action.host,
-                users: {}
+                users: {},
+                lobby: false
             }
         case UPDATE_GAME:
             action = action as UpdateGameAction
