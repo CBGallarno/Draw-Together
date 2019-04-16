@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as firebase from "firebase";
+import "./Play.scss";
 import {connect} from "react-redux";
 import {Route} from "react-router-dom";
 import GameLobby from "../gameLobby/GameLobby";
@@ -21,15 +22,22 @@ const mapStateToProps = (state: AppState) => {
 };
 
 class PlayComponent extends React.Component<PlayProps, any> {
-
+    private store = { error: "" };
     createGame() {
-        firebase.firestore().collection('games').add({host: this.props.auth.userId})
-            .then((response) => {
-                this.props.history.push(`${this.props.match!.url}/lobby/${response.id}`)
-            })
+        if(this.props.auth.userId != "") {
+            firebase.firestore().collection('games').add({host: this.props.auth.userId})
+                .then((response) => {
+                    this.props.history.push(`${this.props.match!.url}/lobby/${response.id}`)
+                })
+        }
+        else{
+            this.store.error = "Need to be logged in to create a game";
+            this.forceUpdate();
+        }
     }
 
     joinGame(code: string) {
+        if(code !=""){
         firebase.firestore().collection('games').where('joinCode', '==', code).where('lobby', '==', true).get().then((response) => {
             if (response.size === 1) {
                 const doc = response.docs[0]
@@ -42,9 +50,17 @@ class PlayComponent extends React.Component<PlayProps, any> {
                     this.props.history.push(`${this.props.match!.url}/lobby/${doc.id}`)
                 )
             } else {
+                console.log('not found');
+                this.store.error = "game not found";
+                this.forceUpdate();
                 // game not found. Could be duplicates found??? (prevent this)
             }
-        })
+        })}
+        else{
+            this.store.error = "Please enter a code";
+            this.forceUpdate();
+        }
+
     }
 
     render() {
@@ -56,6 +72,7 @@ class PlayComponent extends React.Component<PlayProps, any> {
                     render={(props) => <PlayHome createGameClick={() => this.createGame()}
                                                  joinGameClick={(code) => this.joinGame(code)} {...props}/>}
                 />
+                <h1 className={"error-message"}>{this.store.error}</h1>
             </div>
         );
     }
