@@ -7,11 +7,11 @@ interface CanvasProps {
     onDraw: (x: number, y: number) => void;
     onDrawStart: () => void;
     onDrawEnd: () => void;
+    drawable: boolean
 }
 
 class Canvas extends Component<CanvasProps, any> {
 
-    currentDrawing: Drawing = {strokes: []};
     canvasRef: RefObject<HTMLCanvasElement>;
     drawing: boolean = false;
 
@@ -24,18 +24,8 @@ class Canvas extends Component<CanvasProps, any> {
         };
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
-        if (this.props.currentDrawing === undefined || this.props.currentDrawing === null) {
-            this.currentDrawing = {
-                strokes: [
-                    {
-                        x: [1, 50],
-                        y: [1, 50]
-                    }
-                ]
-            }
-        } else {
-            this.currentDrawing = this.props.currentDrawing
-        }
+        this.handleEnd = this.handleEnd.bind(this)
+        this.handleStart = this.handleStart.bind(this)
     }
 
     getCanvasContext() {
@@ -46,19 +36,35 @@ class Canvas extends Component<CanvasProps, any> {
         }
     }
 
+    handleStart() {
+        if (this.props.drawable && !this.drawing) {
+            this.drawing = true;
+            this.props.onDrawStart()
+        }
+    }
+
+    handleEnd() {
+        if (this.props.drawable && this.drawing) {
+            this.drawing = false;
+            this.props.onDrawEnd()
+        }
+    }
+
+    handleMove(x: number, y: number) {
+        if (this.props.drawable && this.canvasRef.current) {
+            this.props.onDraw(x - this.canvasRef.current.offsetLeft, y - this.canvasRef.current.offsetTop)
+        }
+    }
+
     handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
         if (this.drawing && this.canvasRef.current !== null) {
-            // console.log(e.clientX + ' - ' + e.clientY)
-            this.props.onDraw(e.clientX - this.canvasRef.current.offsetLeft, e.clientY - this.canvasRef.current.offsetTop)
+            this.handleMove(e.clientX, e.clientY)
         }
-        e.preventDefault()
-        e.stopPropagation()
     }
 
     handleTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
-        if (this.drawing && this.canvasRef.current !== null) {
-            // console.log(e.clientX + ' - ' + e.clientY)
-            this.props.onDraw(e.touches[0].clientX - this.canvasRef.current.offsetLeft, e.touches[0].clientY - this.canvasRef.current.offsetTop)
+        if (this.drawing && this.canvasRef.current !== null && this.props.drawable) {
+            this.handleMove(e.touches[0].clientX, e.touches[0].clientY)
         }
     }
 
@@ -77,24 +83,25 @@ class Canvas extends Component<CanvasProps, any> {
 
     draw() {
         const context = this.getCanvasContext();
-        if (context !== null && this.props.currentDrawing !== null) {
+        if (context && this.props.currentDrawing) {
             context.clearRect(0, 0, 100, 100);
             context.lineJoin = "round"
             context.translate(0.5, 0.5)
-            for (const stroke of this.currentDrawing.strokes) {
+            for (const stroke of this.props.currentDrawing.strokes) {
                 context.beginPath();
                 if (stroke.x.length > 0 && stroke.y.length > 0) {
+
                     context.moveTo(stroke.x[0], stroke.y[0]);
                     for (let i = 1; i < stroke.x.length && i < stroke.y.length; i++) {
                         context.lineTo(stroke.x[i], stroke.y[i]);
                     }
                     context.strokeStyle = '#000000';
-                    context.lineWidth = 2;
+                    context.lineWidth = 5;
                     context.stroke();
                     context.closePath()
                 }
             }
-        context.resetTransform()
+            context.resetTransform()
         }
     }
 
@@ -102,38 +109,16 @@ class Canvas extends Component<CanvasProps, any> {
         return (
             <div className="canvas">
                 <canvas width={this.state.canvasWidth} height={this.state.canvasHeight} ref={this.canvasRef} id="canvas"
-                        onMouseDown={() => {
-                            if (!this.drawing) {
-                                this.drawing = true
-                                this.props.onDrawStart()
-                            }
-                        }}
-                        onTouchStart={(e) => {
-                            if (!this.drawing) {
-                                this.drawing = true
-                                this.props.onDrawStart()
-                                e.stopPropagation()
-                                e.preventDefault()
-                            }
-                        }}
-                        onMouseUp={() => {
-                            if (this.drawing) {
-                                this.drawing = false
-                                this.props.onDrawEnd()
-                            }
-                        }}
-                        onTouchEnd={() => {
-                            if (this.drawing) {
-                                this.drawing = false
-                                this.props.onDrawEnd()
-                            }
-                        }}
+                        onMouseDown={this.handleStart}
+                        onTouchStart={this.handleStart}
+
+                        onMouseUp={this.handleEnd}
+                        onTouchEnd={this.handleEnd}
+
                         onMouseMove={this.handleMouseMove}
                         onTouchMove={this.handleTouchMove}
-                        onMouseOut={() => {
-                            this.drawing = false
-                            this.props.onDrawEnd()
-                        }}/>
+
+                        onMouseOut={this.handleEnd}/>
             </div>
         );
     }

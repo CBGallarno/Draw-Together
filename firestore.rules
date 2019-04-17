@@ -20,7 +20,7 @@ service cloud.firestore {
       }
       match /roundInfo/{round} {
       	allow read: if true;
-        allow write: if false;
+        allow write: if resource.data.drawer == request.auth.uid && get(path(getGamePrefix())).data.currentRound == round;
       }
     }
     match /users/{user} {

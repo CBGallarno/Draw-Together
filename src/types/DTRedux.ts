@@ -21,7 +21,7 @@ export interface GameState {
     host: string
     users: UsersState
     joinCode?: string
-    currentRound?: RoundState
+    currentRound?: string
     lobby: boolean
 }
 

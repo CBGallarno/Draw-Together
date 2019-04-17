@@ -19,7 +19,7 @@ const mapStateToProps = (state: AppState) => {
     }
 };
 
-class CanvasTest extends Component<CanvasTestProps, {currentDrawing: Drawing}> {
+class CanvasTest extends Component<CanvasTestProps, { currentDrawing: Drawing }> {
 
     constructor(props: CanvasTestProps) {
         super(props);
@@ -48,7 +48,7 @@ class CanvasTest extends Component<CanvasTestProps, {currentDrawing: Drawing}> {
     render() {
         return (
             <div className="CanvasTest">
-                <Canvas currentDrawing={this.state.currentDrawing}
+                <Canvas drawable={true} currentDrawing={this.state.currentDrawing}
                         onDraw={this.handleDraw}
                         onDrawStart={this.handleDrawStart}
                         onDrawEnd={this.handleDrawEnd}
