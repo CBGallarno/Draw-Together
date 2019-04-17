@@ -21,6 +21,14 @@ export interface GameState {
     host: string
     users: UsersState
     joinCode?: string
+    currentRound?: string
+    lobby: boolean
+}
+
+export interface RoundState {
+    drawer: string
+    round: number
+    word: string
 }
 
 export interface Props {

@@ -6,9 +6,9 @@ import 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/FirebaseAuth';
 import {connect} from "react-redux";
 import * as Redux from "@/types/DTRedux"
-import {AuthState} from "@/types/DTRedux"
 import {Redirect} from 'react-router';
 import {AppState} from "@/reducers";
+import {AuthState} from "@/types/DTRedux";
 
 const mapStateToProps = (state: AppState) => {
     return {

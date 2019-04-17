@@ -1,7 +1,7 @@
 import {
     CREATE_GAME,
     CreateGameAction,
-    GameActionTypes,
+    GameActionTypes, JOIN_GAME, JoinGameAction,
     SET_USERS,
     SetUsersAction,
     UPDATE_GAME,
@@ -12,7 +12,8 @@ import {GameState, UsersState} from "@/types/DTRedux";
 const initialSate = {
     gameId: '',
     host: '',
-    users: {}
+    users: {},
+    lobby: false
 };
 
 export function GameReducer(state: GameState = initialSate, action: GameActionTypes): GameState {
@@ -22,7 +23,16 @@ export function GameReducer(state: GameState = initialSate, action: GameActionTy
             return {
                 gameId: action.gameId,
                 host: action.host,
-                users: {}
+                users: {},
+                lobby: false
+            }
+        case JOIN_GAME:
+            action = action as JoinGameAction
+            return {
+                gameId: action.gameId,
+                host: action.host,
+                users: {},
+                lobby: true
             }
         case UPDATE_GAME:
             action = action as UpdateGameAction

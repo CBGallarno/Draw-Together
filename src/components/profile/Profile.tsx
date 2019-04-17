@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {RefObject} from 'react';
 import './Profile.scss'
 import * as firebase from 'firebase';
 import 'firebase/firestore'
@@ -20,17 +19,20 @@ const mapStateToProps = (state: AppState) => {
     }
 }
 
-const signout = () => {
-    firebase.auth().signOut()
-}
-
 class profileComponent extends React.Component<ProfileProps, any> {
-    displayNameInput: RefObject<HTMLInputElement>;
+    displayNameInput: React.RefObject<HTMLInputElement>;
 
     constructor(props: ProfileProps) {
         super(props);
         this.displayNameInput = React.createRef();
-        this.saveDisplayName.bind(this)
+        this.saveDisplayName = this.saveDisplayName.bind(this);
+        this.signout = this.signout.bind(this);
+    }
+
+    signout() {
+        firebase.auth().signOut().then(() => {
+            console.log("TODO")
+        })
     }
 
     saveDisplayName() {
@@ -45,12 +47,13 @@ class profileComponent extends React.Component<ProfileProps, any> {
 
     render() {
         if (this.props.auth.signedIn) {
-            let displayName = (<p>{this.props.auth.userName}</p>)
-            if (this.props.auth.userName == null) {
+            let displayName = (<p>{this.props.auth.userName}</p>);
+            if (this.props.auth.userName === null) {
                 displayName = (<span>
         <input type="text" placeholder="Display Name" ref={this.displayNameInput}/>
         <button onClick={this.saveDisplayName}>Save</button>
       </span>)
+
             }
             return (
                 <div className="profile">
@@ -60,7 +63,7 @@ class profileComponent extends React.Component<ProfileProps, any> {
                     <div className="profileInfo">
                         <h4>Display Name:</h4> {displayName}
                     </div>
-                    <button onClick={() => signout()}>Sign Out</button>
+                    <button onClick={this.signout}>Sign Out</button>
                 </div>
             )
         } else {
