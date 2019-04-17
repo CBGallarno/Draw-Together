@@ -42,28 +42,28 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
             this.unsubscribeCurrentRoundListener = this.props.gameDocRef.collection('roundInfo').doc(this.props.game.currentRound).onSnapshot((snap) => {
                 const data = snap.data()
                 if (data) {
-                    if (this.state.drawing) {
-                        this.setState({
+                   let newState: any = {
+                        round: data,
+                    };
+                    if (data.drawing && this.state.drawing.strokes.length === 0 || this.props.auth.userId !== data.drawer) {
+                        newState = {
                             round: data,
                             drawing: data.drawing
-                        });
+                        }
                     }
+                    this.setState(newState)
                     if (this.props.auth.userId === data.drawer) {
-                        this.setState({
-                            round: data
-                        })
                         this.props.gameDocRef!.collection('roundInfo').doc('roundWords').get().then((response) => {
                             this.setState({word: response.get(snap.id)})
                         })
-                    } else {
-                        this.setState({
-                            round: data,
-                            drawing: data.drawing
-                        });
                     }
                 }
             });
         }
+    }
+
+    componentWillUnmount(): void {
+        this.unsubscribeCurrentRoundListener()
     }
 
     handleOnDrawStart() {
