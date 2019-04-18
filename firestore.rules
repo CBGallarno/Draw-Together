@@ -15,12 +15,13 @@ service cloud.firestore {
         allow write: if get(path(getGamePrefix())).data.lobby == true;
       }
       match /roundInfo/roundWords {
-      	allow read: if get(path(getGamePrefix()) + "/roundInfo/" + get(path(getGamePrefix())).data.currentRound).drawer == request.auth.uid
+      	allow read: if get(path(getGamePrefix() + "/roundInfo/" + get(path(getGamePrefix())).data.currentRound)).data.drawer == request.auth.uid
         allow write: if false;
       }
       match /roundInfo/{round} {
-      	allow read: if true;
-        allow write: if resource.data.drawer == request.auth.uid && get(path(getGamePrefix())).data.currentRound == round;
+      	allow read: if round != "roundWords";
+        allow write: if resource.data.drawer == request.auth.uid && get(path(getGamePrefix())).data.currentRound == round; // allow drawer
+        allow write: if resource.data.drawer == request.resource.data.drawer && resource.data.round == request.resource.data.round // allow guesses
       }
     }
     match /users/{user} {
