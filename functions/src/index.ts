@@ -12,10 +12,48 @@ const db = admin.firestore();
 // noinspection JSUnusedGlobalSymbols
 export const addUserDataOnNewUser = functions.auth.user().onCreate((user) => {
     return admin.firestore().collection('users').doc(user.uid).set({
-        email: user.email,
-        username: user.displayName ? user.displayName : null
+        email: user.email ? user.email : null,
+        username: user.displayName ? user.displayName : null,
     })
 });
+
+// noinspection JSUnusedGlobalSymbols
+export const onRoundUpdate = functions.firestore.document('games/{gameId}/roundInfo/{round}').onUpdate((change: functions.Change<DocumentSnapshot>, context) => {
+    if (change.after.id === "roundWords") {
+        return null
+    }
+    const data = change.after.data();
+    if (data) {
+        if (data.finished) {
+            return null
+        }
+        const guesses: [] = data.guesses;
+        if (guesses && guesses.length > 0) {
+            return admin.firestore().collection('games').doc(context.params.gameId).collection('roundInfo').doc('roundWords').get().then(response => {
+                const words = response.data();
+                if (words) {
+                    const word = words[change.after.id];
+                    let update = undefined;
+                    guesses.some((val: any) => {
+                        const guess = val.guess;
+                        if (word === guess && val.team === data.team) {
+                            update = change.after.ref.update({finished: true, correct: val.user, word: word})
+                            return true
+                        }
+                        return false
+                    })
+                    if (update) {
+                        return update
+                    } else {
+                        return null
+                    }
+                }
+                return null
+            })
+        }
+    }
+    return null
+})
 
 // noinspection JSUnusedGlobalSymbols
 export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpdate((change: functions.Change<DocumentSnapshot>) => {
@@ -53,7 +91,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                     const roundDoc = docRef.collection('roundInfo').doc();
                     return transaction.set(docRef.collection('users').doc('users'), users)
                         .create(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: 'selectWord'})
-                        .create(roundDoc, {drawer, round: 1})
+                        .create(roundDoc, {drawer, round: 1, team: users[drawer].team, finished: false})
                         .update(docRef, {currentRound: roundDoc.id, joinCode: null})
                 })
             })
