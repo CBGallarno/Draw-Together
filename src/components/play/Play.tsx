@@ -54,6 +54,23 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
 
     joinGame(code: string) {
         if (code) {
+			if (this.props.auth.signedIn == false){
+			firebase.auth().signInAnonymously().catch(function(error){//login in and record errors
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				console.log(errorCode);
+				console.log(errorMessage);
+			}).then(function(){
+				console.log("test");
+			});
+			//firebase.auth().onAuthStateChanged(function(user){
+				//if (user){//user is logged in
+					//var uid = user.uid;
+				//}
+			//});
+			//this.props.auth.userId = uid;
+			}
+			else{
             firebase.firestore().collection('games').where('joinCode', '==', code).where('lobby', '==', true).get().then((response) => {
                 if (response.size === 1) {
                     const doc = response.docs[0];
@@ -73,6 +90,7 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                     // TODO: game not found. Could be duplicates found??? (prevent this)
                 }
             })
+			}
         } else {
             this.setState({error: "Please enter a code"})
         }
