@@ -114,6 +114,15 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
         this.gameDocRef = firebase.firestore().collection('games').doc(gameId);
 
         this.unsubscribeCurrentGameListener = this.gameDocRef.onSnapshot((response) => {
+            const data = response.data();
+            if(data && data.joinCode && this.gameDocRef && this.props.auth.userName !=""){
+                const obj: any = {};
+                obj[this.props.auth.userId] = {
+                    team: null,
+                    displayName: this.props.auth.userName
+                };
+                this.gameDocRef.collection('users').doc('users').set(obj,{merge: true}).then(()=>{console.log("set successful")}); //use to join user
+            }
             this.props.dispatch(updateGame({gameId: response.id, ...response.data()}));
         });
         this.unsubscribeCurrentGameUsersListener = this.gameDocRef.collection('users').doc('users').onSnapshot((response) => {
