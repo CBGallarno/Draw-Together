@@ -43,7 +43,7 @@ export const onRoundUpdate = functions.firestore.document('games/{gameId}/roundI
                     let update = undefined;
                     guesses.some((val: any) => {
                         const guess = val.guess;
-                        if (word === guess && val.team === data.team) {
+                        if (word.localeCompare(guess, {sensitivity: 'base'}) === 0 && val.team === data.team) {
                             update = change.after.ref.update({finished: true, correct: val.user, word: word})
                             return true
                         }
