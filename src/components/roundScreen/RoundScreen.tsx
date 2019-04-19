@@ -1,6 +1,7 @@
 import React, {Component, RefObject} from 'react';
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
+import "./RoundScreen.scss"
 import * as firebase from "firebase"
 import {AuthState, GameState, Props} from "@/types/DTRedux";
 import Canvas from "@/components/canvas/Canvas";
@@ -109,7 +110,7 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
         }
     }
 
-    sendGuess(e: React.MouseEvent<HTMLButtonElement>) {
+    sendGuess(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const inputRef = this.guessRef.current;
         if (inputRef && this.props.gameDocRef && this.props.auth.userId) {
@@ -145,9 +146,9 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
         if (this.state.round.drawer === this.props.auth.userId) {
             guesser = <p>guessOne, GuessTwo</p>
         } else {
-            guesser = <form>
+            guesser = <form onSubmit={this.sendGuess}>
                 <input ref={this.guessRef} type="text" placeholder="Enter Guess"/>
-                <button onClick={this.sendGuess} type="button">Guess!</button>
+                <button type="submit">Guess!</button>
             </form>
         }
 

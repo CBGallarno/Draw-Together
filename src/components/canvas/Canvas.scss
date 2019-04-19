@@ -1,9 +1,11 @@
-#canvas {
-  border: 1px solid blue;
-  touch-action: none;
-  width: 95%;
-  height: 80vh;
-  margin: 0 2.5%;
-  overflow: hidden;
-  //position: fixed;
+.canvas{
+  height: 60%;
+  #canvas {
+    border: 1px solid blue;
+    touch-action: none;
+    width: 95%;
+    height: 100%;
+    margin: 0 2.5%;
+    overflow: hidden;
+  }
 }

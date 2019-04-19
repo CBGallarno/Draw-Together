@@ -41,6 +41,7 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
             firebase.firestore().collection('games').add({host: this.props.auth.userId})
                 .then((response) => {
+                    this.setState({error: ""});
                     this.props.dispatch(createGame(response.id, this.props.auth.userId));
                     this.subscribeToGameDocs(response.id);
                     this.props.history.push(`${this.props.match!.url}/${response.id}`);
@@ -80,6 +81,7 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                                     displayName: "* " + PlayComponent.generateGuestUsername()
                                 };
                                 doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() => {
+                                    this.setState({error: ""});
                                     this.props.dispatch(joinGame(doc.id, doc.get("host")));
                                     this.subscribeToGameDocs(doc.id);
                                     this.props.history.push(`${this.props.match!.url}/${doc.id}`);
@@ -102,6 +104,7 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                             displayName: this.props.auth.userName
                         };
                         doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() => {
+                            this.setState({error: ""});
                             this.props.dispatch(joinGame(doc.id, doc.get("host")));
                             this.subscribeToGameDocs(doc.id);
                             this.props.history.push(`${this.props.match!.url}/${doc.id}`);

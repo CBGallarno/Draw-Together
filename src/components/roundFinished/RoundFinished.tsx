@@ -14,6 +14,8 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
         this.state = {
             round: {},
         };
+
+        this.startNextRound = this.startNextRound.bind(this);
     }
 
     componentDidMount(): void {
@@ -24,6 +26,10 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
                 })
             });
         }
+    }
+
+    startNextRound() {
+        alert("NExt Round")
     }
 
     render() {
@@ -38,6 +44,7 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
             <div className="RoundFinished">
                 <p>{correct} guessed it</p>
                 <p>The word was: {this.state.round.word}</p>
+                <button type="button" onClick={this.startNextRound}>Next Round</button>
             </div>
         );
     }
