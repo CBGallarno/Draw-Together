@@ -19,7 +19,7 @@ const mapStateToProps = (state: AppState) => {
     }
 }
 
-class profileComponent extends React.Component<ProfileProps, any> {
+class profileComponent extends React.Component<ProfileProps, { editing: boolean }> {
     displayNameInput: React.RefObject<HTMLInputElement>;
 
     constructor(props: ProfileProps) {
@@ -27,6 +27,10 @@ class profileComponent extends React.Component<ProfileProps, any> {
         this.displayNameInput = React.createRef();
         this.saveDisplayName = this.saveDisplayName.bind(this);
         this.signout = this.signout.bind(this);
+
+        this.state = {
+            editing: false
+        }
     }
 
     signout() {
@@ -36,10 +40,11 @@ class profileComponent extends React.Component<ProfileProps, any> {
     }
 
     saveDisplayName() {
-        if (this.displayNameInput.current !== null) {
+        if (this.displayNameInput.current) {
             const username = this.displayNameInput.current.value;
             firebase.firestore().collection('users').doc(this.props.auth.userId).update({username: username}).then(() => {
                     this.props.dispatch(updateUserName(username))
+                    this.setState({editing: false})
                 }
             )
         }
@@ -47,10 +52,19 @@ class profileComponent extends React.Component<ProfileProps, any> {
 
     render() {
         if (this.props.auth.signedIn) {
-            let displayName = (<p>{this.props.auth.userName}</p>);
-            if (this.props.auth.userName === null) {
+            let displayName = (
+                <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}><p onClick={() => {
+                    this.setState({editing: true})
+                }}>{this.props.auth.userName}</p>
+                    <button onClick={() => {
+                        this.setState({editing: true})
+                    }}>Edit
+                    </button>
+                </div>);
+            if (!this.props.auth.userName || this.state.editing) {
                 displayName = (<span>
-        <input type="text" placeholder="Display Name" ref={this.displayNameInput}/>
+                    <input type="text" placeholder="Display Name" ref={this.displayNameInput}
+                           defaultValue={this.props.auth.userName ? this.props.auth.userName : ""}/>
         <button onClick={this.saveDisplayName}>Save</button>
       </span>)
 

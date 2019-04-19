@@ -11,10 +11,17 @@ const db = admin.firestore();
 
 // noinspection JSUnusedGlobalSymbols
 export const addUserDataOnNewUser = functions.auth.user().onCreate((user) => {
-    return admin.firestore().collection('users').doc(user.uid).set({
-        email: user.email ? user.email : null,
-        username: user.displayName ? user.displayName : null,
-    })
+    if (user.providerData.length === 0) {
+        return admin.firestore().collection('users').doc(user.uid).set({
+            email: null,
+            username: "guest",
+        })
+    } else {
+        return admin.firestore().collection('users').doc(user.uid).set({
+            email: user.email ? user.email : null,
+            username: user.displayName ? user.displayName : "User" + Math.floor(Math.random() * 1000),
+        })
+    }
 });
 
 // noinspection JSUnusedGlobalSymbols

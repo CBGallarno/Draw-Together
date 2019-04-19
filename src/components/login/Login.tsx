@@ -21,7 +21,7 @@ interface LoginProps extends Redux.Props {
 }
 
 let loginComponenet: React.FunctionComponent<LoginProps> = ({dispatch, auth}: LoginProps) => {
-    if (!auth.signedIn) {
+    if (!auth.signedIn || auth.isAnonymous) {
         return (
             <div className="Login">
                 <div className="auth">
@@ -36,6 +36,7 @@ let loginComponenet: React.FunctionComponent<LoginProps> = ({dispatch, auth}: Lo
                             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                         ],
                         credentialHelper: 'none',
+                        // TODO:
                         callbacks: {
                             signInSuccessWithAuthResult: ({user}) => {
                                 return false

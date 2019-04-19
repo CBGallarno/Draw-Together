@@ -2,6 +2,7 @@ import {Dispatch} from "redux";
 
 export interface AuthState {
     signedIn: boolean
+    isAnonymous: boolean
     userId: string
     userName: string
     userEmail: string

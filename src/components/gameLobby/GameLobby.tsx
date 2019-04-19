@@ -3,11 +3,13 @@ import {connect} from "react-redux";
 import * as firebase from "firebase";
 import {AppState} from "@/reducers";
 import {AuthState, GameState, Props} from "@/types/DTRedux";
+import {RouteChildrenProps} from "react-router";
 
-interface GameLobbyProps extends Props {
+interface GameLobbyProps extends Props, RouteChildrenProps<{ gameId: string }> {
     auth: AuthState
     game: GameState
     gameDocRef: firebase.firestore.DocumentReference | undefined
+    onLeaveGame: () => void
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -30,19 +32,19 @@ class GameLobby extends Component<GameLobbyProps, any> {
     startGame() {
         if (this.props.gameDocRef !== undefined) {
             this.props.gameDocRef.update({lobby: false}).then((response) => {
-                console.log(response)
+                console.log("Start Game")
             })
         }
     }
 
     leaveGame() {
-        if (this.props.gameDocRef !== undefined) {
+        if (this.props.gameDocRef) {
             const obj: any = {};
             obj[this.props.auth.userId] = firebase.firestore.FieldValue.delete();
             this.props.gameDocRef.collection('users').doc('users').update(obj).then(() =>
-                console.log()
-                // dispatch leaveGame()
+                this.props.history.replace("/play")
             )
+            this.props.onLeaveGame()
         }
     }
 

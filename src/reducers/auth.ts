@@ -3,6 +3,7 @@ import {AuthState} from "@/types/DTRedux";
 
 const initialSate = {
     signedIn: false,
+    isAnonymous: true,
     userId: '',
     userName: '',
     userEmail: ''
@@ -15,6 +16,7 @@ export function AuthReducer(state: AuthState = initialSate, action: AuthActions)
         case LOGIN:
             return {
                 signedIn: true,
+                isAnonymous: action.isAnonymous,
                 userId: action.userId,
                 userName: action.userName,
                 userEmail: action.userEmail

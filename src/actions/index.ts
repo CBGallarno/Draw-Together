@@ -7,6 +7,7 @@ export interface LoginAction {
     userId: string
     userName: string
     userEmail: string
+    isAnonymous: boolean
 }
 
 export interface UpdateUserNameAction {
@@ -20,11 +21,12 @@ export interface LogoutAction {
 
 export type AuthActions = LoginAction | LogoutAction | UpdateUserNameAction
 
-export const login = (userId: string, userName: string, userEmail: string): LoginAction => ({
+export const login = (userId: string, userName: string, userEmail: string, isAnonymous: boolean): LoginAction => ({
     type: LOGIN,
     userId,
     userName,
-    userEmail
+    userEmail,
+    isAnonymous
 });
 
 export const updateUserName = (userName: string): UpdateUserNameAction => ({

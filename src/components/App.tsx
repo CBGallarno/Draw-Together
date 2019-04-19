@@ -28,7 +28,7 @@ class App extends React.Component<Props, any> {
 
     render() {
         let loginEl = (<Link to="/login">Login</Link>);
-        if (this.props.auth.signedIn) {
+        if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
             loginEl = (<Link to="/profile">Profile</Link>)
         }
 

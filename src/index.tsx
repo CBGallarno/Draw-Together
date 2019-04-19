@@ -17,11 +17,20 @@ firebase.initializeApp({
     projectId: 'pict-proto'
 });
 
+let unsubscribeUserDataListener: any = undefined;
+
 firebase.auth().onAuthStateChanged((user) => {
-    if (!!user) {
-        firebase.firestore().collection('users').doc(user.uid).get().then((response) => {
-            const {username, email}: any = response.data()
-            store.dispatch(login(user.uid, username, email))
+    if (unsubscribeUserDataListener) {
+        unsubscribeUserDataListener()
+    }
+    if (user) {
+        const {uid, isAnonymous} = user
+        unsubscribeUserDataListener = firebase.firestore().collection('users').doc(user.uid).onSnapshot((response) => {
+            const userData = response.data()
+            if (userData) {
+                const {username, email}: any = userData
+                store.dispatch(login(uid, username, email, isAnonymous))
+            }
         })
     } else {
         store.dispatch(logout())
