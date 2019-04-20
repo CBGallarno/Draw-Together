@@ -44,11 +44,11 @@ export const onRoundUpdate = functions.firestore.document('games/{gameId}/roundI
                     guesses.some((val: any) => {
                         const guess = val.guess;
                         if (word.localeCompare(guess, {sensitivity: 'base'}) === 0 && val.team === data.team) {
-                            update = change.after.ref.update({finished: true, correct: val.user, word: word})
+                            update = change.after.ref.update({finished: true, correct: val.user, word: word});
                             return true
                         }
                         return false
-                    })
+                    });
                     if (update) {
                         return update
                     } else {
@@ -60,7 +60,7 @@ export const onRoundUpdate = functions.firestore.document('games/{gameId}/roundI
         }
     }
     return null
-})
+});
 
 // noinspection JSUnusedGlobalSymbols
 export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpdate((change: functions.Change<DocumentSnapshot>) => {
@@ -69,7 +69,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
     const docRef = change.after.ref;
     if (beforeData !== undefined && afterData !== undefined) {
         // Host clicked start game
-        if (beforeData.lobby === true && afterData.lobby === false) {
+        if (beforeData.lobby && !afterData.lobby) {
             return admin.firestore().runTransaction((transaction) => {
                 return transaction.get(docRef.collection('users').doc('users')).then((response: DocumentSnapshot) => {
                     const users = response.data();
@@ -99,8 +99,41 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                     return transaction.set(docRef.collection('users').doc('users'), users)
                         .create(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: 'selectWord'})
                         .create(roundDoc, {drawer, round: 1, team: users[drawer].team, finished: false})
-                        .update(docRef, {currentRound: roundDoc.id, joinCode: null})
+                        .update(docRef, {currentRound: roundDoc.id, joinCode: null, nextRound: false})
                 })
+            })
+        } else if (!beforeData.nextRound && afterData.nextRound) { // nextRound goes from false, to true
+            // get users, find available drawers on other team,
+            const prevRoundID = beforeData.currentRound;
+            return admin.firestore().runTransaction((transaction) => {
+                return transaction.getAll(docRef.collection('users').doc('users'), docRef.collection('roundInfo').doc(prevRoundID)).then((docData) => {
+                    const usersDoc = docData[0];
+                    const prevRoundDoc = docData[1];
+                    const users = usersDoc.data();
+                    const prevRound = prevRoundDoc.data();
+                    if (users && Object.keys(users).length !== 0 && prevRound) {
+                        const userKeys = Object.keys(users);
+                        const nextTeam = prevRound.team === 1 ? 2 : 1;
+                        const nextDrawers = userKeys.reduce((availDrawers: string[], userKey: string) => {
+                            const user = users[userKey];
+                            if (user.team === nextTeam && !user.drawn) {
+                                availDrawers.push(userKey)
+                            }
+
+                            return availDrawers
+                        }, []);
+                        const drawIndex = Math.floor(Math.random() * nextDrawers.length);
+                        const drawer = nextDrawers[drawIndex];
+                        users[drawer].drawn = true;
+                        const roundDoc = docRef.collection('roundInfo').doc();
+                        return transaction.set(docRef.collection('users').doc('users'), users)
+                            .create(roundDoc, {drawer, round: prevRound.round + 1, team: nextTeam, finished: false})
+                            .update(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: 'selectWord' + (prevRound.round + 1)})
+                            .update(docRef, {currentRound: roundDoc.id, nextRound: false})
+                    }
+                    throw new Error("no users found")
+                    })
+
             })
         }
     }

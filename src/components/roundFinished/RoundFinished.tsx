@@ -29,7 +29,9 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
     }
 
     startNextRound() {
-        alert("NExt Round")
+        if (this.props.gameDocRef) {
+            this.props.gameDocRef.update({nextRound: true, currentRound: ""})// TODO: consider removing currentRound
+        }
     }
 
     render() {

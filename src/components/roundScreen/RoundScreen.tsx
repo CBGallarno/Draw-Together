@@ -51,7 +51,7 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
                     let newState: any = {
                         round: data,
                     };
-                    if (data.drawing && this.state.drawing.strokes.length === 0 || this.props.auth.userId !== data.drawer) {
+                    if (data.drawing && (this.state.drawing.strokes.length === 0 || this.props.auth.userId !== data.drawer)) {
                         newState = {
                             round: data,
                             drawing: data.drawing

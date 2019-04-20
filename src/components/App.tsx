@@ -29,7 +29,7 @@ class App extends React.Component<Props, any> {
     render() {
         let loginEl = (<Link to="/login">Login</Link>);
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
-            loginEl = (<Link to="/profile">Profile</Link>)
+            loginEl = (<Link to="/profile" style={{display: "flex", flexDirection: "column", lineHeight: "initial", justifyContent: "center", textAlign: "center"}}><span style={{marginTop: "auto"}}>Profile</span><span style={{fontSize: "0.5em", marginTop: "auto", marginBottom: "10px"}}>{this.props.auth.userName}</span></Link>)
         }
 
         return (
