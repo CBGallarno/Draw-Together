@@ -69,7 +69,9 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
     const docRef = change.after.ref;
     if (beforeData !== undefined && afterData !== undefined) {
         // Host clicked start game
-        if (beforeData.lobby && !afterData.lobby) {
+		let pictoWords: string[] = ['Angel', 'Angry', 'Baby', 'Ball', 'Beard', 'Bed', 'Bee', 'Book', 'Bowtie', 'Bucket', 'Bunny', 'Bus', 'Butterfly', 'Cake', 'Camera', 'Castle', 'Cat', 'Chain saw', 'Circus tent', 'Computer', 'Crayon', 'Dolphin', 'Dragon', 'Dumbbell', 'Eel', 'Egg', 'Eyeball', 'Ferris wheel', 'Fireworks', 'Flag', 'Flower', 'Flute', 'Frame', 'Frog', 'Garbage', 'Giraffe', 'Glasses', 'Glue', 'Hand', 'Ice cream', 'Igloo', 'Jump rope', 'Key', 'Kite', 'Kiwi', 'Koala', 'Ladybug', 'Lamp', 'Leprechaun', 'Light bulb', 'Lion', 'Lipstick', 'Lollipop', 'Magnet', 'Mailbox', 'Mask', 'Megaphone', 'Mermaid', 'Money', 'Music', 'Night', 'Nose', 'Owl', 'Pacifier', 'Peanut', 'Photo', 'Pie', 'Pizza', 'Plate', 'Pocket watch', 'Pumpkin', 'Rain', 'Robot', 'Sand castle', 'Seat belt', 'Slipper', 'Snail', 'Snowflake', 'Snowman', 'Space', 'Spider', 'Stairs', 'Starfish', 'Stethoscope', 'Strawberry', 'Sun', 'Tadpole', 'Teapot', 'Telescope', 'Thread', 'Tire', 'Toothbrush', 'Train', 'Treasure', 'Tree', 'Tricycle', 'Truck', 'Trumpet', 'Turtle', 'Zombie'];
+		const index = Math.floor(Math.random() * pictoWords.length);
+		if (beforeData.lobby && !afterData.lobby) {
             return admin.firestore().runTransaction((transaction) => {
                 return transaction.get(docRef.collection('users').doc('users')).then((response: DocumentSnapshot) => {
                     const users = response.data();
@@ -97,7 +99,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                     const drawer = userData[1] as string;
                     const roundDoc = docRef.collection('roundInfo').doc();
                     return transaction.set(docRef.collection('users').doc('users'), users)
-                        .create(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: 'selectWord'})
+                        .create(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: pictoWords[index]})
                         .create(roundDoc, {drawer, round: 1, team: users[drawer].team, finished: false})
                         .update(docRef, {currentRound: roundDoc.id, joinCode: null, nextRound: false})
                 })
@@ -128,7 +130,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                         const roundDoc = docRef.collection('roundInfo').doc();
                         return transaction.set(docRef.collection('users').doc('users'), users)
                             .create(roundDoc, {drawer, round: prevRound.round + 1, team: nextTeam, finished: false})
-                            .update(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: 'selectWord' + (prevRound.round + 1)})
+                            .update(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: pictoWords[index] + (prevRound.round + 1)})
                             .update(docRef, {currentRound: roundDoc.id, nextRound: false})
                     }
                     throw new Error("no users found")
