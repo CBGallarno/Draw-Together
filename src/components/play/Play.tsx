@@ -178,7 +178,9 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
         let currentScreen = <div className="loading"><p>Loading</p></div>;
         if (this.props.match && this.props.match.params.gameId) {
 
-            if (this.props.game.lobby) {
+            if (this.props.game.finished) {
+                currentScreen = (<p>Game Over!</p>)
+            } else if (this.props.game.lobby) {
                 currentScreen = (<GameLobby onLeaveGame={() => this.unsubscribeFromGameDocs()} {...this.props} gameDocRef={this.gameDocRef}/>)
             } else if (this.props.game.currentRound) {
                 currentScreen = (<RoundScreen gameDocRef={this.gameDocRef}/>)

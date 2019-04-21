@@ -30,10 +30,10 @@ class GameLobby extends Component<GameLobbyProps, any> {
     }
 
     startGame() {
-        if (this.props.gameDocRef !== undefined) {
-            this.props.gameDocRef.update({lobby: false}).then((response) => {
-                console.log("Start Game")
-            })
+        if (this.props.gameDocRef && Object.keys(this.props.game.users).length >= 4) {
+            this.props.gameDocRef.update({lobby: false})
+        } else {
+            alert("Not enough players (min: 4)")
         }
     }
 
