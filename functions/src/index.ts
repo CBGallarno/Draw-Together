@@ -121,9 +121,11 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                             if (user.team === nextTeam && !user.drawn) {
                                 availDrawers.push(userKey)
                             }
-
                             return availDrawers
                         }, []);
+                        if (nextDrawers.length === 0) {
+                            return transaction.update(docRef, {finished: true, nextRound: false})
+                        }
                         const drawIndex = Math.floor(Math.random() * nextDrawers.length);
                         const drawer = nextDrawers[drawIndex];
                         users[drawer].drawn = true;
@@ -159,7 +161,7 @@ export const initializeGameOnCreate = functions.firestore.document('games/{gameI
 
     return db.collection('games').where('joinCode', '==', joinCode).get().then((response) => {
         if (response.empty) {
-            return snap.ref.update({joinCode: joinCode, lobby: true})
+            return snap.ref.update({joinCode: joinCode, lobby: true, finished: false})
         }
         console.error("Join code not available: " + joinCode);
         return snap.ref.update({error: true})

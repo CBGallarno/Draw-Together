@@ -24,6 +24,7 @@ export interface GameState {
     joinCode?: string
     currentRound?: string
     lobby: boolean
+    finished: boolean
 }
 
 export interface RoundState {

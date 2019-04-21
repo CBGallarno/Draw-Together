@@ -13,7 +13,8 @@ const initialSate = {
     gameId: '',
     host: '',
     users: {},
-    lobby: false
+    lobby: false,
+    finished: false
 };
 
 export function GameReducer(state: GameState = initialSate, action: GameActionTypes): GameState {
@@ -24,7 +25,8 @@ export function GameReducer(state: GameState = initialSate, action: GameActionTy
                 gameId: action.gameId,
                 host: action.host,
                 users: {},
-                lobby: false
+                lobby: false,
+                finished: false
             }
         case JOIN_GAME:
             action = action as JoinGameAction
@@ -32,7 +34,8 @@ export function GameReducer(state: GameState = initialSate, action: GameActionTy
                 gameId: action.gameId,
                 host: action.host,
                 users: {},
-                lobby: true
+                lobby: true,
+                finished: false
             }
         case UPDATE_GAME:
             action = action as UpdateGameAction
