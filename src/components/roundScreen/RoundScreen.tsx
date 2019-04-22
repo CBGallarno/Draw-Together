@@ -26,6 +26,7 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
 
     lastWriteTime: number = -1;
     unsubscribeCurrentRoundListener: any;
+    unsubscribeCurrentDrawingListener: any;
     guessRef: RefObject<HTMLInputElement>;
 
     constructor(props: RoundScreenProps) {
@@ -45,20 +46,15 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
     }
 
     componentDidMount(): void {
+        let mounting = true
         if (this.props.gameDocRef) {
             this.unsubscribeCurrentRoundListener = this.props.gameDocRef.collection('roundInfo').doc(this.props.game.currentRound).onSnapshot((snap) => {
                 const data = snap.data();
                 if (data) {
-                    let newState: any = {
+                    this.setState({
                         round: data,
-                    };
-                    if (data.drawing && (this.state.drawing.strokes.length === 0 || this.props.auth.userId !== data.drawer)) {
-                        newState = {
-                            round: data,
-                            drawing: data.drawing
-                        }
-                    }
-                    this.setState(newState);
+                    });
+                    // TODO: Move this to read once per round
                     if (this.props.auth.userId === data.drawer) {
                         this.props.gameDocRef!.collection('roundInfo').doc('roundWords').get().then((response) => {
                             this.setState({word: response.get(snap.id)})
@@ -66,11 +62,21 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
                     }
                 }
             });
+            this.unsubscribeCurrentDrawingListener = this.props.gameDocRef.collection('drawings').doc(this.props.game.currentRound).onSnapshot((snap) => {
+                const data = snap.data();
+                if (data && data.drawing && (this.props.auth.userId !== this.state.round.drawer || mounting)) {
+                    this.setState({
+                        drawing: data.drawing
+                    });
+                    mounting = false;
+                }
+            })
         }
     }
 
     componentWillUnmount(): void {
         this.unsubscribeCurrentRoundListener()
+        this.unsubscribeCurrentDrawingListener()
     }
 
     handleOnDrawStart() {
@@ -92,7 +98,7 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
 
             if (this.props.gameDocRef && Date.now() - this.lastWriteTime > 1000) {
                 this.lastWriteTime = currTime;
-                this.props.gameDocRef.collection('roundInfo').doc(this.props.game.currentRound).update({
+                this.props.gameDocRef.collection('drawings').doc(this.props.game.currentRound).update({
                     drawing: this.state.drawing
                 });
                 console.log("WRITE")
@@ -104,7 +110,7 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
 
     handleOnDrawEnd() {
         if (this.props.gameDocRef) {
-            this.props.gameDocRef.collection('roundInfo').doc(this.props.game.currentRound).update({
+            this.props.gameDocRef.collection('drawings').doc(this.props.game.currentRound).update({
                 drawing: this.state.drawing
             });
             console.log("WRITE")

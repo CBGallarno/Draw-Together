@@ -18,6 +18,10 @@ service cloud.firestore {
       	allow read: if get(path(getGamePrefix() + "/roundInfo/" + get(path(getGamePrefix())).data.currentRound)).data.drawer == request.auth.uid
         allow write: if false;
       }
+      match /drawings/{drawing} {
+      	allow read: if true;
+        allow write: if true;
+      }
       match /roundInfo/{round} {
       	allow read: if round != "roundWords";
         allow write: if resource.data.drawer == request.auth.uid && get(path(getGamePrefix())).data.currentRound == round; // allow drawer

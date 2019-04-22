@@ -100,6 +100,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                     const roundDoc = docRef.collection('roundInfo').doc();
                     return transaction.set(docRef.collection('users').doc('users'), users)
                         .create(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: pictoWords[index]})
+                        .create(docRef.collection('drawings').doc(roundDoc.id), {drawing: {strokes: []}})
                         .create(roundDoc, {drawer, round: 1, team: users[drawer].team, finished: false})
                         .update(docRef, {currentRound: roundDoc.id, joinCode: null, nextRound: false})
                 })
@@ -132,6 +133,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                         const roundDoc = docRef.collection('roundInfo').doc();
                         return transaction.set(docRef.collection('users').doc('users'), users)
                             .create(roundDoc, {drawer, round: prevRound.round + 1, team: nextTeam, finished: false})
+                            .create(docRef.collection('drawings').doc(roundDoc.id), {drawing: {strokes: []}})
                             .update(docRef.collection('roundInfo').doc('roundWords'), {[roundDoc.id]: pictoWords[index]})
                             .update(docRef, {currentRound: roundDoc.id, nextRound: false})
                     }
