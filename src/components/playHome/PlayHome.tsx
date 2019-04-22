@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from "react-redux";
 import {GameState} from "@/types/DTRedux";
 import {AppState} from "@/reducers";
-
+import "./PlayHome.scss";
 interface PlayHomeProps {
     game: GameState
     joinGameClick: (code: string) => void
@@ -29,9 +29,9 @@ class PlayHome extends React.Component<PlayHomeProps, any> {
         return (
             <div className="Play">
                 <h1>Play</h1>
-                <input ref={this.codeRef} type="input" placeholder="Game Code"/>
-                <button onClick={(() => this.props.joinGameClick(this.codeRef.current!.value))}>Join Game</button>
-                <button onClick={this.props.createGameClick}>Create Game</button>
+                <input className={"styledInput"}ref={this.codeRef} type="input" placeholder="Game Code"/>
+                <button className={"styledButton"} onClick={(() => this.props.joinGameClick(this.codeRef.current!.value))}>Join Game</button>
+                <button className={"styledButton"} onClick={this.props.createGameClick}>Create Game</button>
             </div>
         );
     }

@@ -161,8 +161,8 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
             console.log(guesser)
         } else if (this.state.round.drawer !== this.props.auth.userId) {
             guesser = <form onSubmit={this.sendGuess}>
-                <input ref={this.guessRef} type="text" placeholder="Enter Guess"/>
-                <button type="submit">Guess!</button>
+                <input className={"styledInput"} ref={this.guessRef} type="text" placeholder="Enter Guess"/>
+                <button className ={"styledButton"} type="submit">Guess!</button>
             </form>
         }
 
@@ -184,8 +184,8 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
         return (
             <div className="RoundScreen">
                 <div className="Team">
-                    <h3>Team:</h3>
-                    <div>{teamMembers}</div>
+                    <h3>Team Members:</h3>
+                    {teamMembers}
                 </div>
                 {drawerMessage}
                 <Canvas drawable={!!this.state.word} currentDrawing={this.state.drawing} onDraw={this.handleOnDraw}

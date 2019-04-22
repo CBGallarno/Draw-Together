@@ -55,20 +55,22 @@ class GameLobby extends Component<GameLobbyProps, any> {
         if (users) {
             const userEntries = Object.entries(users);
             for (const userEntry of userEntries) {
-                usersEls.push(<li key={userEntry[0]}>{userEntry[1].displayName}</li>)
+                usersEls.push(<li key={userEntry[0]}><p>{userEntry[1].displayName}</p></li>)
             }
         }
 
         return (
             <div className="GameLobby">
                 <h1>Lobby</h1>
-                <ul>
+                <div className={"list-type1"}>
+                <ol>
                     {usersEls}
-                </ul>
+                </ol>
+            </div>
                 <h2>Use this code to join: <span className="code">{this.props.game.joinCode}</span></h2>
-                {this.props.auth.userId === this.props.game.host && <button onClick={this.startGame}>Start Game</button>}
+                {this.props.auth.userId === this.props.game.host && <button className={"styledButton"} onClick={this.startGame}>Start Game</button>}
                 {this.props.auth.userId !== this.props.game.host &&
-                <button onClick={this.leaveGame}>Leave Game</button>}
+                <button className={"styledButton"}onClick={this.leaveGame}>Leave Game</button>}
             </div>
         );
     }

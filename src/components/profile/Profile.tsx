@@ -56,16 +56,16 @@ class profileComponent extends React.Component<ProfileProps, { editing: boolean 
                 <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}><p onClick={() => {
                     this.setState({editing: true})
                 }}>{this.props.auth.userName}</p>
-                    <button onClick={() => {
+                    <button className={"styledEditButton"} onClick={() => {
                         this.setState({editing: true})
                     }}>Edit
                     </button>
                 </div>);
             if (!this.props.auth.userName || this.state.editing) {
                 displayName = (<span>
-                    <input type="text" placeholder="Display Name" ref={this.displayNameInput}
+                    <input className={"styledInput"}type="text" placeholder="Display Name" ref={this.displayNameInput}
                            defaultValue={this.props.auth.userName ? this.props.auth.userName : ""}/>
-        <button onClick={this.saveDisplayName}>Save</button>
+        <button className={"styledEditButton"} onClick={this.saveDisplayName}>Save</button>
       </span>)
 
             }
@@ -77,7 +77,7 @@ class profileComponent extends React.Component<ProfileProps, { editing: boolean 
                     <div className="profileInfo">
                         <h4>Display Name:</h4> {displayName}
                     </div>
-                    <button onClick={this.signout}>Sign Out</button>
+                    <button className={"styledButton"} onClick={this.signout}>Sign Out</button>
                 </div>
             )
         } else {
