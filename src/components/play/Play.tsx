@@ -23,7 +23,7 @@ const mapStateToProps = (state: AppState) => {
     }
 };
 
-class PlayComponent extends React.Component<PlayProps, { error: string }> {
+class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
     gameDocRef: firebase.firestore.DocumentReference | undefined;
     unsubscribeCurrentGameListener: any;
     unsubscribeCurrentGameUsersListener: any;
@@ -32,8 +32,19 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
         super(props);
 
         this.state = {
-            error: ""
+            errors: []
         }
+    }
+
+    addError(error: string) {
+        this.setState({
+            errors: [error, ...this.state.errors]
+        })
+        setTimeout(() => {
+            this.setState({
+                errors: this.state.errors.slice(1)
+            })
+        }, 3000)
     }
 
 
@@ -41,15 +52,12 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
             firebase.firestore().collection('games').add({host: this.props.auth.userId})
                 .then((response) => {
-                    this.setState({error: ""});
                     this.props.dispatch(createGame(response.id, this.props.auth.userId));
                     this.subscribeToGameDocs(response.id);
                     this.props.history.push(`${this.props.match!.url}/${response.id}`);
                 })
         } else {
-            this.setState({
-                error: "Need to be logged in to create a game"
-            })
+            this.addError("Need to be logged in to create a game")
         }
     }
 
@@ -81,15 +89,13 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                                     displayName: "* " + PlayComponent.generateGuestUsername()
                                 };
                                 doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() => {
-                                    this.setState({error: ""});
                                     this.props.dispatch(joinGame(doc.id, doc.get("host")));
                                     this.subscribeToGameDocs(doc.id);
                                     this.props.history.push(`${this.props.match!.url}/${doc.id}`);
                                 })
                             } else {
                                 console.log('not found');
-                                this.setState({error: "game not found"})
-                                // TODO: game not found. Could be duplicates found??? (prevent this)
+                                this.addError("Game Not Fund")
                             }
                         });
                     }
@@ -104,20 +110,18 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                             displayName: this.props.auth.userName
                         };
                         doc.ref.collection('users').doc('users').set(obj, {merge: true}).then(() => {
-                            this.setState({error: ""});
                             this.props.dispatch(joinGame(doc.id, doc.get("host")));
                             this.subscribeToGameDocs(doc.id);
                             this.props.history.push(`${this.props.match!.url}/${doc.id}`);
                         })
                     } else {
                         console.log('not found');
-                        this.setState({error: "game not found"})
-                        // TODO: game not found. Could be duplicates found??? (prevent this)
+                        this.addError("Game Not Found")
                     }
                 })
             }
         } else {
-            this.setState({error: "Please enter a code"})
+            this.addError("Please Enter a Code")
         }
 
     }
@@ -190,10 +194,18 @@ class PlayComponent extends React.Component<PlayProps, { error: string }> {
                                       joinGameClick={(code) => this.joinGame(code)}/>;
         }
 
+        const errorEls = this.state.errors.map(error => {
+            return (<h1 className="error-message">{error}</h1>)
+        })
+
         return (
             <div className="Play">
-                <h1 className={"error-message"}>{this.state.error}</h1>
-                {currentScreen}
+                <div className="ErrorContainer">
+                    {errorEls}
+                </div>
+                <div className="PlayContent">
+                    {currentScreen}
+                </div>
             </div>
         );
     }

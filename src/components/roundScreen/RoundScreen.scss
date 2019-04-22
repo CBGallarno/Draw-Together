@@ -1,3 +1,42 @@
 .RoundScreen {
   height: 100%;
 }
+
+.Team {
+  height: 7.5%;
+  display: flex;
+  overflow: hidden;
+  justify-content: space-around;
+  align-items: center;
+  h3 {
+    text-align: left;
+    margin: 0px;
+  }
+
+  div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: scroll;
+    justify-content: space-around;
+    flex-grow: 1;
+    padding: 0 10px;
+
+    margin: 5px 0;
+
+    p {
+      margin: 2px;
+      font-size: 0.5em;
+    }
+  }
+}
+
+.guess {
+  margin: 5px;
+
+  input {
+    width: 100%;
+    text-align: center;
+  }
+}

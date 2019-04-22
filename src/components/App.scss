@@ -12,9 +12,16 @@
   margin-left: 10px;
 }
 
+.App-content {
+  max-height: 90vh;
+  height: 90vh;
+  overflow: hidden;
+}
+
 .App-header {
   background-color: map-get($theme, primary-color);
-  min-height: 10vh;
+  height: 10vh;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;

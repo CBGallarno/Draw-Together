@@ -12,7 +12,7 @@ import {BrowserRouter as Router, Link, Route} from "react-router-dom";
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
 import {AuthState} from "@/types/DTRedux";
-import CanvasTest from "@/components/canvasTest/CanvasTest"
+// import CanvasTest from "@/components/canvasTest/CanvasTest"
 
 const mapStateToProps = (state: AppState) => {
     return {
@@ -29,7 +29,17 @@ class App extends React.Component<Props, any> {
     render() {
         let loginEl = (<Link to="/login">Login</Link>);
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
-            loginEl = (<Link to="/profile" style={{display: "flex", flexDirection: "column", lineHeight: "initial", justifyContent: "center", textAlign: "center"}}><span style={{marginTop: "auto"}}>Profile</span><span style={{fontSize: "0.5em", marginTop: "auto", marginBottom: "10px"}}>{this.props.auth.userName}</span></Link>)
+            loginEl = (<Link to="/profile" style={{
+                display: "flex",
+                flexDirection: "column",
+                lineHeight: "initial",
+                justifyContent: "center",
+                textAlign: "center"
+            }}><span style={{marginTop: "auto"}}>Profile</span><span style={{
+                fontSize: "0.5em",
+                marginTop: "auto",
+                marginBottom: "10px"
+            }}>{this.props.auth.userName}</span></Link>)
         }
 
         return (
@@ -41,11 +51,13 @@ class App extends React.Component<Props, any> {
                         <Link to="/play">Play</Link>
                         {loginEl}
                     </header>
-                    <Route path="/" exact component={Home}/>
-                    <Route path="/play/:gameId?" component={Play}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/profile" component={Profile}/>
-                    <Route path="/canvas" component={CanvasTest}/>
+                    <div className="App-content">
+                        <Route path="/" exact component={Home}/>
+                        <Route path="/play/:gameId?" component={Play}/>
+                        <Route path="/login" component={Login}/>
+                        <Route path="/profile" component={Profile}/>
+                        {/*<Route path="/canvas" component={CanvasTest}/>*/}
+                    </div>
                 </Router>
             </div>
         );

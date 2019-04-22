@@ -1,6 +1,7 @@
 import React, {Component, RefObject} from 'react';
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
+// tslint:disable-next-line:no-import-side-effect
 import "./RoundScreen.scss"
 import * as firebase from "firebase"
 import {AuthState, GameState, Props} from "@/types/DTRedux";
@@ -143,9 +144,16 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
         }
 
         let guesser = <p/>;
-        if (this.state.round.drawer === this.props.auth.userId) {
-            guesser = <p>guessOne, GuessTwo</p>
-        } else {
+        if (this.state.round.drawer === this.props.auth.userId && this.state.round.guesses) {
+            guesser = this.state.round.guesses.reduce((guessEls: JSX.Element[] = [], guess: any) => {
+                if (guess.team === this.state.round.team) {
+                    guessEls.push(<p>{guess.guess}</p>)
+                    console.log(guess)
+                }
+                return guessEls
+            }, [])
+            console.log(guesser)
+        } else if (this.state.round.drawer !== this.props.auth.userId) {
             guesser = <form onSubmit={this.sendGuess}>
                 <input ref={this.guessRef} type="text" placeholder="Enter Guess"/>
                 <button type="submit">Guess!</button>
@@ -169,12 +177,14 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
 
         return (
             <div className="RoundScreen">
-                <h1>TEAM</h1>
-                <div>{teamMembers}</div>
+                <div className="Team">
+                    <h3>Team:</h3>
+                    <div>{teamMembers}</div>
+                </div>
                 {drawerMessage}
                 <Canvas drawable={!!this.state.word} currentDrawing={this.state.drawing} onDraw={this.handleOnDraw}
                         onDrawStart={this.handleOnDrawStart} onDrawEnd={this.handleOnDrawEnd}/>
-                {guesser}
+                <div className="guess">{guesser}</div>
             </div>
         );
     }
