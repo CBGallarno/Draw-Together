@@ -11,6 +11,7 @@ export interface AuthState {
 export interface UserState {
     displayName: string
     team: string
+    score: number
 }
 
 export interface UsersState {

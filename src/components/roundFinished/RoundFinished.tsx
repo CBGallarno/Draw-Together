@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as firebase from "firebase"
 import {AuthState, GameState, Props} from "@/types/DTRedux";
-
+import LeaderBoard from "@/components/leaderboard/LeaderBoard";
 interface RoundFinishedProps extends Props {
     auth: AuthState
     game: GameState
@@ -41,21 +41,12 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
         if (this.props.game.users[this.state.round.correct]) {
             correct = this.props.game.users[this.state.round.correct].displayName
         }
-
-        const users = this.props.game.users
-
-        const leaderboard = Object.keys(users).map((userId) => {
-            return <p>{users[userId].displayName}: {userId === this.state.round.correct ? 1: 0}</p>
-        })
-
         return (
             <div className="RoundFinished">
                 <p>{correct} guessed it</p>
                 <p>The word was: {this.state.round.word}</p>
                 <button type="button" onClick={this.startNextRound}>Next Round</button>
-                <div className="leaderBoard">
-                    {leaderboard}
-                </div>
+                <LeaderBoard winningID ={this.state.round.correct}/>
             </div>
         );
     }
