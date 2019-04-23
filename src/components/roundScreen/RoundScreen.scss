@@ -1,15 +1,18 @@
 .RoundScreen {
   height: 100%;
 
+  display: flex;
+  flex-direction: column;
+
   & > div {
     overflow: hidden;
-    margin: 0px;
+    margin: 0;
   }
 
 
   .Team {
     padding: 5px 10px;
-    height: 7.5%;
+    min-height: 7.5%;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -38,7 +41,7 @@
   }
 
   .currentDrawer {
-    height: 5%;
+    min-height: 5%;
     padding: auto 0;
     display: flex;
     justify-content: center;
@@ -49,11 +52,16 @@
   }
 
   .canvas {
-    height: 75%;
+    flex-grow: 1;
+    min-height: 87.5%;
   }
 
   .guess {
-    height: 10%;
+    position: absolute;
+    opacity: 70%;
+    bottom: 10px;
+    width: 100%;
+    height: 50px;
 
     form {
       height: 100%;
