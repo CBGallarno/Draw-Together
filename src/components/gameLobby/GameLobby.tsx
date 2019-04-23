@@ -10,6 +10,7 @@ interface GameLobbyProps extends Props, RouteChildrenProps<{ gameId: string }> {
     game: GameState
     gameDocRef: firebase.firestore.DocumentReference | undefined
     onLeaveGame: () => void
+    handleError: (message: string) => void
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -33,7 +34,7 @@ class GameLobby extends Component<GameLobbyProps, any> {
         if (this.props.gameDocRef && Object.keys(this.props.game.users).length >= 4) {
             this.props.gameDocRef.update({lobby: false})
         } else {
-            alert("Not enough players (min: 4)")
+            this.props.handleError("Not enough players (minimum: 4)")
         }
     }
 
@@ -67,10 +68,10 @@ class GameLobby extends Component<GameLobbyProps, any> {
                     {usersEls}
                 </ol>
             </div>
-                <h2>Use this code to join: <span className="code">{this.props.game.joinCode}</span></h2>
-                {this.props.auth.userId === this.props.game.host && <button className={"styledButton"} onClick={this.startGame}>Start Game</button>}
+                <h2>Use this code to join: <span className="code">{this.props.game.joinCode!.toLowerCase()}</span></h2>
+                {this.props.auth.userId === this.props.game.host && <button onClick={this.startGame}>Start Game</button>}
                 {this.props.auth.userId !== this.props.game.host &&
-                <button className={"styledButton"}onClick={this.leaveGame}>Leave Game</button>}
+                <button onClick={this.leaveGame}>Leave Game</button>}
             </div>
         );
     }

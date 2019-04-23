@@ -43,7 +43,7 @@ export const onRoundUpdate = functions.firestore.document('games/{gameId}/roundI
                     let update = undefined;
                     guesses.some((val: any) => {
                         const guess = val.guess;
-                        if (word.localeCompare(guess, {sensitivity: 'base'}) === 0 && val.team === data.team) {
+                        if (word.toLowerCase().replace(/\s/g, "") === guess.toLowerCase().replace(/\s/g, "") && val.team === data.team) {
                             update = change.after.ref.update({finished: true, correct: val.user, word: word});
                             return true
                         }
@@ -157,6 +157,7 @@ export const initializeGameOnCreate = functions.firestore.document('games/{gameI
         } else {
             joinCode = "XYQZ34"
         }
+        joinCode = joinCode.toLowerCase()
     } else {
         return
     }

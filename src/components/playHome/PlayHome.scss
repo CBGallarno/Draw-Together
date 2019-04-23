@@ -1,24 +1,35 @@
-.styledButton {
-   background-color: #008CBA;; /* Green */
-   border: none;
-   color: white;
-   padding: 15px 32px;
-   text-align: center;
-   text-decoration: none;
-   display: inline-block;
-   font-size: 16px;
-   margin: 10px;
- }
-.styledInput{
-   width: 100%;
-   padding: 12px 20px;
-   margin: 8px 0;
-   display: inline-block;
-   border: 1px solid #ccc;
-   border-radius: 4px;
-   box-sizing: border-box;
-}
-.Play{
-   width: 50vw;
-   margin: 0 auto;
+.PlayHome {
+   margin: 0 10px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+
+   h3 {
+      margin: 20px 0;
+   }
+
+   * {
+      margin: 0;
+   }
+
+   & > * {
+      width: 100%;
+      max-width: 350px;
+      margin: 5px 0;
+   }
+
+   div {
+      display: flex;
+      justify-content: space-between;
+
+      input {
+         flex-grow: 1;
+         margin-right: 5px;
+      }
+   }
+
+   input {
+      text-align: center;
+   }
 }

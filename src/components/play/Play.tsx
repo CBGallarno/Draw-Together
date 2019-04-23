@@ -10,6 +10,7 @@ import {createGame, joinGame, setUsers, updateGame} from "@/actions/game";
 import {connect} from "react-redux";
 import RoundScreen from "@/components/roundScreen/RoundScreen";
 import GameLobby from "@/components/gameLobby/GameLobby";
+import {Loading} from "@/components/loading/loading";
 
 interface PlayProps extends RouteChildrenProps<{ gameId: string }>, Props {
     game: GameState
@@ -34,6 +35,8 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
         this.state = {
             errors: []
         }
+
+        this.addError = this.addError.bind(this)
     }
 
     addError(error: string) {
@@ -80,7 +83,7 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
                 }).then((user) => {
                     if (user) {
                         const userCred = user as firebase.auth.UserCredential
-                        firebase.firestore().collection('games').where('joinCode', '==', code).where('lobby', '==', true).get().then((response) => {
+                        firebase.firestore().collection('games').where('joinCode', '==', code.toLowerCase()).where('lobby', '==', true).get().then((response) => {
                             if (response.size === 1) {
                                 const doc = response.docs[0];
                                 const obj: any = {};
@@ -101,7 +104,7 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
                     }
                 });
             } else {
-                firebase.firestore().collection('games').where('joinCode', '==', code).where('lobby', '==', true).get().then((response) => {
+                firebase.firestore().collection('games').where('joinCode', '==', code.toLowerCase()).where('lobby', '==', true).get().then((response) => {
                     if (response.size === 1) {
                         const doc = response.docs[0];
                         const obj: any = {};
@@ -152,9 +155,7 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
                         team: null,
                         displayName: this.props.auth.userName
                     };
-                    this.gameDocRef.collection('users').doc('users').set(obj, {merge: true}).then(() => {
-                        console.log("set successful")
-                    }); //use to join user
+                    this.gameDocRef.collection('users').doc('users').set(obj, {merge: true})
                 }
             }
             this.props.dispatch(updateGame({gameId: response.id, ...response.data()}));
@@ -179,13 +180,13 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
     }
 
     render() {
-        let currentScreen = <div className="loading"><p>Loading</p></div>;
+        let currentScreen = <Loading/>;
         if (this.props.match && this.props.match.params.gameId) {
 
             if (this.props.game.finished) {
                 currentScreen = (<p>Game Over!</p>)
-            } else if (this.props.game.lobby) {
-                currentScreen = (<GameLobby onLeaveGame={() => this.unsubscribeFromGameDocs()} {...this.props} gameDocRef={this.gameDocRef}/>)
+            } else if (this.props.game.lobby && this.props.game.joinCode) {
+                currentScreen = (<GameLobby handleError={this.addError} onLeaveGame={() => this.unsubscribeFromGameDocs()} {...this.props} gameDocRef={this.gameDocRef}/>)
             } else if (this.props.game.currentRound) {
                 currentScreen = (<RoundScreen gameDocRef={this.gameDocRef}/>)
             }

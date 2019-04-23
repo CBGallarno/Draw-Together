@@ -8,7 +8,7 @@ import 'firebase/firestore'
 import 'firebase/auth';
 import Play from "./play/Play";
 
-import {BrowserRouter as Router, Link, Route} from "react-router-dom";
+import {BrowserRouter as Router, NavLink, Route} from "react-router-dom";
 import {connect} from "react-redux";
 import {AppState} from "@/reducers";
 import {AuthState} from "@/types/DTRedux";
@@ -27,9 +27,9 @@ interface Props {
 class App extends React.Component<Props, any> {
 
     render() {
-        let loginEl = (<Link to="/login">Login</Link>);
+        let loginEl = (<NavLink activeClassName="active-link" to="/login">Login</NavLink>);
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
-            loginEl = (<Link to="/profile" style={{
+            loginEl = (<NavLink activeClassName="active-link" to="/profile" style={{
                 display: "flex",
                 flexDirection: "column",
                 lineHeight: "initial",
@@ -39,7 +39,7 @@ class App extends React.Component<Props, any> {
                 fontSize: "0.5em",
                 marginTop: "auto",
                 marginBottom: "10px"
-            }}>{this.props.auth.userName}</span></Link>)
+            }}>{this.props.auth.userName}</span></NavLink>)
         }
 
         return (
@@ -47,8 +47,8 @@ class App extends React.Component<Props, any> {
                 <Router>
                     <header className="App-header">
                         <img src={logo} className="App-logo" alt="logo"/>
-                        <Link to="/">Home</Link>
-                        <Link to="/play">Play</Link>
+                        <NavLink exact activeClassName="active-link" to="/">Home</NavLink>
+                        <NavLink activeClassName="active-link" to="/play">Play</NavLink>
                         {loginEl}
                     </header>
                     <div className="App-content">

@@ -2,7 +2,7 @@
 
 .App {
   height: 100%;
-  width: 100vw
+  width: 100%;
 }
 
 .App-logo {
@@ -10,6 +10,29 @@
   height: 40px;
   pointer-events: none;
   margin-left: 10px;
+}
+
+button, .button {
+  background-color: map-get($theme, action-color);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1em;
+  margin: 10px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .App-content {
@@ -38,9 +61,14 @@
     line-height: 10vh;
     padding: 0 5px;
     font-weight: bold;
+    transition: 0.1s border-bottom-width;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &.active-link {
+      border-bottom: 3px solid map-get($theme, highlight-color)
     }
 
     &:last-child {

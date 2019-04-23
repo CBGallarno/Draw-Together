@@ -1,6 +1,37 @@
-.title{
+.Home {
   text-align: center;
+  padding: 0 10px;
+
+  .banner {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+    margin-top: 25px;
+
+    img {
+      animation-name: banner;
+      animation-duration: 35s;
+      animation-timing-function: linear;
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
+      height: 125px;
+      position: relative;
+      transform: translateX(-100%);
+    }
+  }
 }
-.subtext{
-  text-align: center;
+
+@keyframes banner {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
+
+//Link {
+//  display: block;
+//}
+
