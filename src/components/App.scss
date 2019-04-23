@@ -3,78 +3,102 @@
 .App {
   height: 100%;
   width: 100%;
-}
 
-.App-logo {
-  animation: App-logo-spin infinite 30s linear;
-  height: 40px;
-  pointer-events: none;
-  margin-left: 10px;
-}
+  .App-logo {
+    animation: App-logo-spin infinite 30s linear;
+    height: 40px;
+    pointer-events: none;
+    margin-left: 10px;
+  }
 
-button, .button {
-  background-color: map-get($theme, action-color);
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 1em;
-  margin: 10px;
-  cursor: pointer;
-  display: inline-block;
-}
-
-input[type=text] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.App-content {
-  max-height: 90vh;
-  height: 90vh;
-  overflow: hidden;
-}
-
-.App-header {
-  background-color: map-get($theme, primary-color);
-  height: 10vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  border-bottom: 5px solid map-get($theme, secondary-color);
-
-  a {
-    display: block;
+  button, .button {
+    background-color: map-get($theme, action-color);
+    border: none;
     color: white;
+    padding: 15px 32px;
+    text-align: center;
     text-decoration: none;
-    min-height: 10vh;
-    line-height: 10vh;
-    padding: 0 5px;
-    font-weight: bold;
-    transition: 0.1s border-bottom-width;
+    font-size: 1em;
+    margin: 10px;
+    cursor: pointer;
+    display: inline-block;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+    @media screen and (max-height: 700px) {
+      padding: 5px 10px;
+      margin: 5px 10px;
     }
+  }
 
-    &.active-link {
-      border-bottom: 3px solid map-get($theme, highlight-color)
-    }
 
-    &:last-child {
-      align-self: flex-end;
-      margin-left: auto;
-      margin-right: 15px;
+  input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .App-content {
+    max-height: 90vh;
+    height: 90vh;
+    overflow: hidden;
+  }
+
+  .App-header {
+    background-color: map-get($theme, primary-color);
+    height: 10vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    border-bottom: 5px solid map-get($theme, secondary-color);
+
+    a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      min-height: 10vh;
+      line-height: 10vh;
+      padding: 0 5px;
+      font-weight: bold;
+      transition: 0.1s border-bottom-width;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &.active-link {
+        border-bottom: 3px solid map-get($theme, highlight-color)
+      }
+
+      &:last-child {
+        margin-left: auto;
+        margin-right: 15px;
+      }
+
+      &.login, &.register {
+        display: flex;
+        flex-direction: column;
+        line-height: initial;
+        justify-content: center;
+        text-align: center;
+
+        span:first-child {
+          margin-top: auto;
+        }
+
+        span:nth-child(2) {
+          font-size: 0.5em;
+          margin-top: auto;
+          margin-bottom: 10px;
+        }
+      }
+
     }
   }
 }

@@ -184,10 +184,12 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
         return (
             <div className="RoundScreen">
                 <div className="Team">
-                    <h3>Team Members:</h3>
+                    <h4>Team:</h4>
                     <div>{teamMembers}</div>
                 </div>
+                <div className="currentDrawer">
                 {drawerMessage}
+                </div>
                 <Canvas drawable={!!this.state.word} currentDrawing={this.state.drawing} onDraw={this.handleOnDraw}
                         onDrawStart={this.handleOnDrawStart} onDrawEnd={this.handleOnDrawEnd}/>
                 <div className="guess">{guesser}</div>

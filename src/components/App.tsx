@@ -27,19 +27,15 @@ interface Props {
 class App extends React.Component<Props, any> {
 
     render() {
-        let loginEl = (<NavLink activeClassName="active-link" to="/login">Login</NavLink>);
+        let loginEl = (<NavLink className="login" activeClassName="active-link" to="/login">
+            <span>Login</span>
+            <span>Register</span>
+        </NavLink>);
         if (this.props.auth.signedIn && !this.props.auth.isAnonymous) {
-            loginEl = (<NavLink activeClassName="active-link" to="/profile" style={{
-                display: "flex",
-                flexDirection: "column",
-                lineHeight: "initial",
-                justifyContent: "center",
-                textAlign: "center"
-            }}><span style={{marginTop: "auto"}}>Profile</span><span style={{
-                fontSize: "0.5em",
-                marginTop: "auto",
-                marginBottom: "10px"
-            }}>{this.props.auth.userName}</span></NavLink>)
+            loginEl = (<NavLink className="register" activeClassName="active-link" to="/profile">
+                <span>Profile</span>
+                <span>{this.props.auth.userName}</span>
+            </NavLink>)
         }
 
         return (

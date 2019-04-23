@@ -37,7 +37,6 @@ class Home extends React.Component<HomeProps, any> {
                 <div className="banner">
                     <img src={banner}/>
                     <img src={banner}/>
-                    <img src={banner}/>
                 </div>
             </div>
         );

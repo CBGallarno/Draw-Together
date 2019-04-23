@@ -4,6 +4,7 @@ import * as firebase from "firebase";
 import {AppState} from "@/reducers";
 import {AuthState, GameState, Props} from "@/types/DTRedux";
 import {RouteChildrenProps} from "react-router";
+import "./GameLobby.scss"
 
 interface GameLobbyProps extends Props, RouteChildrenProps<{ gameId: string }> {
     auth: AuthState
@@ -56,19 +57,18 @@ class GameLobby extends Component<GameLobbyProps, any> {
         if (users) {
             const userEntries = Object.entries(users);
             for (const userEntry of userEntries) {
-                usersEls.push(<li key={userEntry[0]}><p>{userEntry[1].displayName}</p></li>)
+                usersEls.push(<p key={userEntry[0]} className={userEntry[0] === this.props.auth.userId ? "currentPlayer" : ""}>{userEntry[1].displayName}</p>)
             }
         }
 
         return (
             <div className="GameLobby">
                 <h1>Lobby</h1>
-                <div className={"list-type1"}>
-                <ol>
+                <div className="playerList">
                     {usersEls}
-                </ol>
             </div>
-                <h2>Use this code to join: <span className="code">{this.props.game.joinCode!.toLowerCase()}</span></h2>
+                <h3>Use this code to join: <span className="code">{this.props.game.joinCode!.toLowerCase()}</span></h3>
+                <h4>{Object.keys(this.props.game.users).length} Rounds</h4>
                 {this.props.auth.userId === this.props.game.host && <button onClick={this.startGame}>Start Game</button>}
                 {this.props.auth.userId !== this.props.game.host &&
                 <button onClick={this.leaveGame}>Leave Game</button>}

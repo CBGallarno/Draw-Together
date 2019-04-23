@@ -3,10 +3,9 @@
   padding: 0 10px;
 
   .banner {
-    display: flex;
-    width: 100%;
+    width: 3000px;
     overflow: hidden;
-    justify-content: center;
+    height: 125px;
     margin-top: 25px;
 
     img {
@@ -17,7 +16,6 @@
       animation-iteration-count: infinite;
       height: 125px;
       position: relative;
-      transform: translateX(-100%);
     }
   }
 }
@@ -27,7 +25,7 @@
     transform: translateX(-100%);
   }
   to {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
 }
 

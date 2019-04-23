@@ -1,42 +1,70 @@
 .RoundScreen {
   height: 100%;
-}
 
-.Team {
-  height: 7.5%;
-  display: flex;
-  overflow: hidden;
-  justify-content: space-around;
-  align-items: center;
-  h3 {
-    text-align: left;
+  & > div {
+    overflow: hidden;
     margin: 0px;
   }
 
-  div {
-    height: 100%;
+
+  .Team {
+    padding: 5px 10px;
+    height: 7.5%;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    overflow: scroll;
     justify-content: space-around;
-    flex-grow: 1;
-    padding: 0 10px;
+    align-items: center;
+    border-bottom: 1px solid black;
 
-    margin: 5px 0;
+    h4 {
+      text-align: left;
+      margin: 0;
+    }
 
-    p {
-      margin: 2px;
-      font-size: 0.5em;
+    div {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      overflow: scroll;
+      justify-content: space-around;
+      flex-grow: 1;
+      padding: 0 10px;
+
+      p {
+        margin: 2px;
+        font-size: 1em;
+      }
     }
   }
-}
 
-.guess {
-  margin: 5px;
+  .currentDrawer {
+    height: 5%;
+    padding: auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin: 0 0;
+    }
+  }
 
-  input {
-    width: 100%;
-    text-align: center;
+  .canvas {
+    height: 75%;
+  }
+
+  .guess {
+    height: 10%;
+
+    form {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      padding: 5px;
+
+      input {
+        flex-grow: 1;
+        text-align: center;
+      }
+    }
   }
 }
