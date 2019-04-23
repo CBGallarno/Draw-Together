@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import * as firebase from "firebase"
 import {AuthState, GameState, Props} from "@/types/DTRedux";
 import LeaderBoard from "@/components/leaderboard/LeaderBoard";
+import "./RoundFinished.scss";
 interface RoundFinishedProps extends Props {
     auth: AuthState
     game: GameState
@@ -46,7 +47,9 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
                 <p>{correct} guessed it</p>
                 <p>The word was: {this.state.round.word}</p>
                 <button type="button" onClick={this.startNextRound}>Next Round</button>
-                <LeaderBoard winningID ={this.state.round.correct}/>
+                <div className={"leaderBoard"}>
+                    <LeaderBoard winningID={this.state.round.correct}/>
+                </div>
             </div>
         );
     }
