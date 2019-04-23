@@ -75,8 +75,12 @@ class RoundScreen extends Component<RoundScreenProps, { round: any, drawing: Dra
     }
 
     componentWillUnmount(): void {
-        this.unsubscribeCurrentRoundListener()
-        this.unsubscribeCurrentDrawingListener()
+        if (this.unsubscribeCurrentDrawingListener) {
+            this.unsubscribeCurrentDrawingListener()
+        }
+        if (this.unsubscribeCurrentRoundListener) {
+            this.unsubscribeCurrentRoundListener()
+        }
     }
 
     handleOnDrawStart() {
