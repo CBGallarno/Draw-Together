@@ -84,6 +84,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                         while (userKeys.length > 0) {
                             const i = Math.floor(Math.random() * userKeys.length);
                             users[userKeys[i]].team = team;
+                            users[userKeys[i]].score = 0;
                             if (team === 1) {
                                 team = 2
                             } else {
@@ -130,6 +131,7 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                         const drawIndex = Math.floor(Math.random() * nextDrawers.length);
                         const drawer = nextDrawers[drawIndex];
                         users[drawer].drawn = true;
+                        users[prevRound.correct].score += 1;
                         const roundDoc = docRef.collection('roundInfo').doc();
                         return transaction.set(docRef.collection('users').doc('users'), users)
                             .create(roundDoc, {drawer, round: prevRound.round + 1, team: nextTeam, finished: false})
