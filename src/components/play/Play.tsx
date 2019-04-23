@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import RoundScreen from "@/components/roundScreen/RoundScreen";
 import GameLobby from "@/components/gameLobby/GameLobby";
 import {Loading} from "@/components/loading/loading";
+import LeaderBoard from "@/components/leaderboard/LeaderBoard";
 
 interface PlayProps extends RouteChildrenProps<{ gameId: string }>, Props {
     game: GameState
@@ -184,9 +185,14 @@ class PlayComponent extends React.Component<PlayProps, { errors: string[] }> {
         if (this.props.match && this.props.match.params.gameId) {
 
             if (this.props.game.finished) {
-                currentScreen = (<p>Game Over!</p>)
+                currentScreen = (<div>
+                    <p>Game Over!</p>
+                    <LeaderBoard winningID=""/>
+                </div>)
             } else if (this.props.game.lobby && this.props.game.joinCode) {
-                currentScreen = (<GameLobby handleError={this.addError} onLeaveGame={() => this.unsubscribeFromGameDocs()} {...this.props} gameDocRef={this.gameDocRef}/>)
+                currentScreen = (<GameLobby handleError={this.addError}
+                                            onLeaveGame={() => this.unsubscribeFromGameDocs()} {...this.props}
+                                            gameDocRef={this.gameDocRef}/>)
             } else if (this.props.game.currentRound) {
                 currentScreen = (<RoundScreen gameDocRef={this.gameDocRef}/>)
             }

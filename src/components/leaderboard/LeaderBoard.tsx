@@ -8,8 +8,9 @@ const mapStateToProps = (state: AppState) => {
         game: state.game
     }
 }
-interface LeaderBoardProps{
-    winningID:  string
+
+interface LeaderBoardProps {
+    winningID: string
     game: GameState
 }
 
@@ -17,23 +18,29 @@ class LeaderBoard extends Component<LeaderBoardProps> {
     constructor(props: LeaderBoardProps) {
         super(props);
     }
+
     render() {
 
         const users = this.props.game.users;
 
         const leaderboard = Object.keys(users).map((userId) => {
-            return <tr><td>{users[userId].displayName}</td><td>{userId === this.props.winningID ? users[userId].score+ 1: users[userId].score}</td></tr>;
+            return <tr key={userId}>
+                <td>{users[userId].displayName}</td>
+                <td>{userId === this.props.winningID ? users[userId].score + 1 : users[userId].score}</td>
+            </tr>;
         });
         return (
-            <div className={"leaderBoard"}>
-                <table>
+            <table className={"leaderBoard"}>
+                <thead>
                 <tr>
                     <th>User</th>
                     <th>Score</th>
-                    </tr>
+                </tr>
+                </thead>
+                <tbody>
                     {leaderboard}
-                </table>
-            </div>
+                </tbody>
+            </table>
         );
     }
 }

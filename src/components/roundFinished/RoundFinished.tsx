@@ -47,9 +47,7 @@ class RoundFinished extends Component<RoundFinishedProps, { round: any }> {
                 <p>{correct} guessed it</p>
                 <p>The word was: {this.state.round.word}</p>
                 <button type="button" onClick={this.startNextRound}>Next Round</button>
-                <div className={"leaderBoard"}>
-                    <LeaderBoard winningID={this.state.round.correct}/>
-                </div>
+                <LeaderBoard winningID={this.state.round.correct}/>
             </div>
         );
     }

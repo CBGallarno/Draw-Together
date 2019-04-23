@@ -11,5 +11,23 @@
     border: 1px solid map-get($theme, secondary-color);
     box-shadow: 0 4px 6px 0 hsla(0, 0, 0, 0.2);
     padding: 10px;
+
+    button {
+      background-color: revert;
+      border: revert;
+      color: revert;
+      padding: revert;
+      text-align: revert;
+      text-decoration: revert;
+      font-size: revert;
+      margin: revert;
+      cursor: revert;
+      display: revert;
+
+      @media screen and (max-height: 700px) {
+        padding: revert;
+        margin: revert;
+      }
+    }
   }
 }

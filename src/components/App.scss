@@ -11,23 +11,24 @@
     margin-left: 10px;
   }
 
-  button, .button {
-    background-color: map-get($theme, action-color);
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 1em;
-    margin: 10px;
-    cursor: pointer;
-    display: inline-block;
 
-    @media screen and (max-height: 700px) {
-      padding: 5px 10px;
-      margin: 5px 10px;
+    button, .button {
+      background-color: map-get($theme, action-color);
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 1em;
+      margin: 10px;
+      cursor: pointer;
+      display: inline-block;
+
+      @media screen and (max-height: 700px) {
+        padding: 5px 10px;
+        margin: 5px 10px;
+      }
     }
-  }
 
 
   input[type=text] {

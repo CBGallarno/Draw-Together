@@ -125,13 +125,14 @@ export const onGameUpdate = functions.firestore.document('games/{gameId}').onUpd
                             }
                             return availDrawers
                         }, []);
+                        users[prevRound.correct].score += 1;
                         if (nextDrawers.length === 0) {
                             return transaction.update(docRef, {finished: true, nextRound: false})
+                                .set(docRef.collection('users').doc('users'), users)
                         }
                         const drawIndex = Math.floor(Math.random() * nextDrawers.length);
                         const drawer = nextDrawers[drawIndex];
                         users[drawer].drawn = true;
-                        users[prevRound.correct].score += 1;
                         const roundDoc = docRef.collection('roundInfo').doc();
                         return transaction.set(docRef.collection('users').doc('users'), users)
                             .create(roundDoc, {drawer, round: prevRound.round + 1, team: nextTeam, finished: false})

@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 import {rootReducer} from './reducers'
-import firebase from "firebase";
+import * as firebase from "firebase/app";
 import {login, logout} from "@/actions";
 
 const store = createStore(rootReducer)
